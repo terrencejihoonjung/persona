@@ -14,7 +14,7 @@ function WeatherWidget() {
   };
 
   return (
-    <div className="flex flex-col items-center border rounded-2xl w-full max-w-4xl h-1/2 py-7 px-14">
+    <div className="flex flex-col items-center border rounded-2xl shadow-lg w-full max-w-4xl h-1/2 py-7 px-14">
       {error || !weatherData ? (
         <p>There was an error fetching from weather data</p>
       ) : (
