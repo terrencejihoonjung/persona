@@ -7,7 +7,6 @@ import HourlyWeatherCard from "./HourlyWeatherCard";
 function WeatherWidget() {
   const [isFahrenheit, setIsFahrenheit] = useState(true);
   const { weatherData, error } = useWeather(33.6846, 117.8265);
-  console.log(weatherData);
 
   const toggleTemperature = () => {
     setIsFahrenheit(!isFahrenheit);
