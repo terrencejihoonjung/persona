@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import { WeatherData, TotalWeatherData } from "../types/WeatherTypes";
 import { Coordinates } from "../types/GeoLocationTypes";
-
-// Helper function to convert Fahrenheit to Celsius
-const convertFtoC = (fahrenheit: number) => {
-  return ((fahrenheit - 32) * 5) / 9;
-};
+import convertFtoC from "../utils/convertFtoC";
 
 function useWeather({ latitude, longitude }: Coordinates) {
   const [weatherData, setWeatherData] = useState<TotalWeatherData | null>(null);
@@ -18,7 +14,6 @@ function useWeather({ latitude, longitude }: Coordinates) {
           setWeatherError("Invalid coordinates");
           return;
         }
-        console.log(latitude, longitude);
 
         const response = await fetch(
           `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,daily,alerts&units=imperial&appid=${
@@ -57,7 +52,7 @@ function useWeather({ latitude, longitude }: Coordinates) {
 
     fetchWeather(); // Initial fetch
 
-    // Set up an interval to fetch weather every 30 minutes
+    // Fetch weather every 30 minutes
     const intervalId = setInterval(fetchWeather, 30 * 60 * 1000);
 
     // Clean up interval on unmount

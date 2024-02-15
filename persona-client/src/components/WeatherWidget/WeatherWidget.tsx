@@ -4,18 +4,26 @@ import useWeather from "../../hooks/useWeather";
 import useGeoLocation from "../../hooks/useGeoLocation";
 import useCityName from "../../hooks/useCityName";
 
+import capitalizeString from "../../utils/capitalizeString";
+
 import WeatherIcon from "./WeatherIcon";
 import HourlyWeatherCard from "./HourlyWeatherCard";
+
+import mockCities from "../../data/mockCoordinates";
 
 function WeatherWidget() {
   const [isFahrenheit, setIsFahrenheit] = useState(true);
 
   const { coordinates, geoLocationError } = useGeoLocation();
   const { weatherData, weatherError } = useWeather(
-    coordinates ? coordinates : { latitude: null, longitude: null }
+    coordinates
+      ? mockCities[0].coordinates
+      : { latitude: null, longitude: null }
   );
   const { cityName, isFetching, cityError } = useCityName(
-    coordinates ? coordinates : { latitude: null, longitude: null }
+    coordinates
+      ? mockCities[0].coordinates
+      : { latitude: null, longitude: null }
   );
 
   const isLoading = !coordinates || !weatherData || isFetching;
@@ -26,9 +34,9 @@ function WeatherWidget() {
   };
 
   return (
-    <div className="flex flex-col items-center border rounded-2xl shadow-lg w-full max-w-4xl min-h-[20rem] py-7 px-14">
+    <div className="flex flex-col items-center border rounded-2xl shadow-lg w-full max-w-3xl h-1/2 min-h-[30rem] py-7 px-14">
       {isLoading ? (
-        <div className="flex flex-col justify-center items-center h-full">
+        <div className="flex flex-col justify-center items-center flex-grow">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -45,7 +53,7 @@ function WeatherWidget() {
           </svg>
         </div>
       ) : displayError ? (
-        <p className="text-lg font-bold text-red-500 w-full flex justify-center items-center">
+        <p className="text-lg font-bold text-red-500 w-full flex justify-center items-center flex-grow">
           {displayError}
         </p>
       ) : (
@@ -60,7 +68,7 @@ function WeatherWidget() {
           <div className="flex flex-col justify-between w-full">
             <div className="flex justify-between mb-36">
               <div id="b1" className="flex flex-col items-start">
-                <h3 className="text-lg font-black">{cityName || "Location"}</h3>
+                <h3 className="text-lg font-black">{cityName}</h3>
                 <h1 className="text-8xl font-regular">
                   {isFahrenheit
                     ? `${Math.round(weatherData.current.temp)}°F`
@@ -68,6 +76,9 @@ function WeatherWidget() {
                 </h1>
               </div>
               <div id="b2" className="flex flex-col items-end">
+                <h3 className="text-lg font-black">
+                  {capitalizeString(weatherData.current.weather[0].description)}
+                </h3>
                 <WeatherIcon
                   weatherIconCode={weatherData.current.weather[0].icon}
                 />
