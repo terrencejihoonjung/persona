@@ -18,6 +18,7 @@ function useWeather({ latitude, longitude }: Coordinates) {
           setWeatherError("Invalid coordinates");
           return;
         }
+        console.log(latitude, longitude);
 
         const response = await fetch(
           `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,daily,alerts&units=imperial&appid=${
@@ -48,16 +49,6 @@ function useWeather({ latitude, longitude }: Coordinates) {
           hourlyForecastData,
         });
         setWeatherError(null);
-
-        console.log({
-          current: {
-            dt: data.current.dt,
-            temp: data.current.temp,
-            weather: data.current.weather,
-            tempCelsius: currTempCelsius,
-          },
-          hourlyForecastData,
-        });
       } catch (error) {
         if (error instanceof Error) setWeatherError(error.message);
         else setWeatherError("There was an error fetching data");
