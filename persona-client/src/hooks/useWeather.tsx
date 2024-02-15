@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";
 import { WeatherData, TotalWeatherData } from "../types/WeatherTypes";
+import { Coordinates } from "../types/GeoLocationTypes";
 
 // Helper function to convert Fahrenheit to Celsius
 const convertFtoC = (fahrenheit: number) => {
   return ((fahrenheit - 32) * 5) / 9;
 };
 
-function useWeather(latitude: number, longitude: number) {
+function useWeather({ latitude, longitude }: Coordinates) {
   const [weatherData, setWeatherData] = useState<TotalWeatherData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [weatherError, setWeatherError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
+        if (latitude === null || longitude === null) {
+          setWeatherError("Invalid coordinates");
+          return;
+        }
+
         const response = await fetch(
           `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,daily,alerts&units=imperial&appid=${
             import.meta.env.VITE_ONECALL_API_KEY
@@ -41,6 +47,7 @@ function useWeather(latitude: number, longitude: number) {
           },
           hourlyForecastData,
         });
+        setWeatherError(null);
 
         console.log({
           current: {
@@ -52,8 +59,8 @@ function useWeather(latitude: number, longitude: number) {
           hourlyForecastData,
         });
       } catch (error) {
-        if (error instanceof Error) setError(error.message);
-        else setError("There was an error fetching data");
+        if (error instanceof Error) setWeatherError(error.message);
+        else setWeatherError("There was an error fetching data");
       }
     };
 
@@ -66,7 +73,7 @@ function useWeather(latitude: number, longitude: number) {
     return () => clearInterval(intervalId);
   }, [latitude, longitude]);
 
-  return { weatherData, error };
+  return { weatherData, weatherError };
 }
 
 export default useWeather;
