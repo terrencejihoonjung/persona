@@ -1,9 +1,13 @@
-import WeatherWidget from "./components/WeatherWidget/WeatherWidget";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import NavBar from "./ui/NavBar";
 
 function App() {
   return (
-    <div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
-      <WeatherWidget />
+    <div className="flex flex-col min-w-screen min-h-screen">
+      <NavBar />
+      <main className="flex-grow">
+        <Dashboard />
+      </main>
     </div>
   );
 }
