@@ -16,14 +16,10 @@ function WeatherWidget() {
 
   const { coordinates, geoLocationError } = useGeoLocation();
   const { weatherData, weatherError } = useWeather(
-    coordinates
-      ? mockCities[0].coordinates
-      : { latitude: null, longitude: null }
+    coordinates ? coordinates : { latitude: null, longitude: null }
   );
   const { cityName, isFetching, cityError } = useCityName(
-    coordinates
-      ? mockCities[0].coordinates
-      : { latitude: null, longitude: null }
+    coordinates ? coordinates : { latitude: null, longitude: null }
   );
 
   const isLoading = !coordinates || !weatherData || isFetching;
