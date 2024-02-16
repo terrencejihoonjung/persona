@@ -3,9 +3,9 @@ import NavBar from "./ui/NavBar";
 
 function App() {
   return (
-    <div className="flex flex-col min-w-screen min-h-screen">
+    <div className="flex flex-col min-w-screen h-screen">
       <NavBar />
-      <main className="flex-grow">
+      <main className="flex flex-col ">
         <Dashboard />
       </main>
     </div>

@@ -34,7 +34,7 @@ function WeatherWidget() {
   };
 
   return (
-    <div className="flex flex-col items-center border rounded-2xl shadow-lg w-full max-w-3xl h-1/2 min-h-[30rem] py-7 px-14">
+    <div className="flex flex-col justify-between border rounded-2xl shadow-lg w-full h-full p-4">
       {isLoading ? (
         <div className="flex flex-col justify-center items-center flex-grow">
           <svg
@@ -53,35 +53,39 @@ function WeatherWidget() {
           </svg>
         </div>
       ) : displayError ? (
-        <p className="text-lg font-bold text-red-500 w-full flex justify-center items-center flex-grow">
+        <p className="text-lg font-bold text-red-500 w-full h-full p-2 flex justify-center items-center">
           {displayError}
         </p>
       ) : (
         <>
-          <span className="w-full flex justify-end mr-2 mb-4">
-            <ToggleSwitch
-              onToggle={toggleTemperature}
-              isFahrenheit={isFahrenheit}
-            />
-          </span>
-
-          <div className="flex flex-col justify-between w-full">
-            <div className="flex justify-between mb-36">
-              <div id="b1" className="flex flex-col items-start">
-                <h3 className="text-lg font-black">{cityName}</h3>
-                <h1 className="text-8xl font-regular">
-                  {isFahrenheit
-                    ? `${Math.round(weatherData.current.temp)}°F`
-                    : `${Math.round(weatherData.current.tempCelsius)}°C`}
-                </h1>
-              </div>
-              <div id="b2" className="flex flex-col items-end">
-                <h3 className="text-lg font-black">
-                  {capitalizeString(weatherData.current.weather[0].description)}
-                </h3>
-                <WeatherIcon
-                  weatherIconCode={weatherData.current.weather[0].icon}
+          <div className="flex flex-col justify-between h-full w-full p-2">
+            <div>
+              <span className="w-full flex justify-end mr-2 mb-2">
+                <ToggleSwitch
+                  onToggle={toggleTemperature}
+                  isFahrenheit={isFahrenheit}
                 />
+              </span>
+
+              <div className="flex justify-between">
+                <div id="b1" className="flex flex-col items-start">
+                  <h3 className="text-lg font-black">{cityName}</h3>
+                  <h1 className="text-6xl font-regular">
+                    {isFahrenheit
+                      ? `${Math.round(weatherData.current.temp)}°F`
+                      : `${Math.round(weatherData.current.tempCelsius)}°C`}
+                  </h1>
+                </div>
+                <div id="b2" className="flex flex-col items-end">
+                  <h3 className="text-lg font-black">
+                    {capitalizeString(
+                      weatherData.current.weather[0].description
+                    )}
+                  </h3>
+                  <WeatherIcon
+                    weatherIconCode={weatherData.current.weather[0].icon}
+                  />
+                </div>
               </div>
             </div>
 

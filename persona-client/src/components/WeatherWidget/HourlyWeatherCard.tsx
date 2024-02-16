@@ -23,9 +23,9 @@ function HourlyWeatherCard({
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <h3 className="text-lg font-black">{timeString}</h3>
-      <img className="w-20 h-20" src={iconUrl} alt="Icon" />
-      <p className="text-md font-semibold">
+      <h3 className="text-sm font-black">{timeString}</h3>
+      <img className="w-14 h-14" src={iconUrl} alt="Icon" />
+      <p className="text-sm font-semibold">
         {isFahrenheit
           ? `${Math.round(weatherData.temp)}°F`
           : `${Math.round(weatherData.tempCelsius)}°C`}
