@@ -1,4 +1,5 @@
 import WeatherWidget from "../../components/WeatherWidget/WeatherWidget";
+import PomodoroTimerWidget from "../../components/PomodoroTimerWidget/PomodoroTimerWidget";
 
 function Dashboard() {
   return (
@@ -14,13 +15,13 @@ function Dashboard() {
       </div>
 
       {/* Spotify Widget - takes up the top 2 rows of the last 4 columns */}
-      <div className="row-span-3 col-span-4 border shadow rounded">
+      <div className="row-span-4 col-span-4 border shadow rounded">
         {/* Spotify Widget content goes here */}
       </div>
 
       {/* Pomodoro Timer - takes up the middle 6 rows of the last 4 columns */}
-      <div className="row-span-5 col-span-4 border shadow rounded">
-        {/* Pomodoro Timer content goes here */}
+      <div className="row-span-4 col-span-4">
+        <PomodoroTimerWidget />
       </div>
 
       {/* Weather Widget - takes up the bottom 4 rows of the last 4 columns */}
