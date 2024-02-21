@@ -1,5 +1,5 @@
-import WeatherWidget from "../../components/WeatherWidget/WeatherWidget";
-import PomodoroTimerWidget from "../../components/PomodoroTimerWidget/PomodoroTimerWidget";
+import WeatherWidget from "./WeatherWidget/WeatherWidget";
+import PomodoroTimerWidget from "./PomodoroTimerWidget/PomodoroTimerWidget";
 
 function Dashboard() {
   return (

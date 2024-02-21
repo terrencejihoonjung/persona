@@ -1,15 +1,15 @@
 import { useState } from "react";
-import ToggleSwitch from "../../ToggleSwitch";
-import useWeather from "../../hooks/useWeather";
-import useGeoLocation from "../../hooks/useGeoLocation";
-import useCityName from "../../hooks/useCityName";
+import ToggleSwitch from "../../../ToggleSwitch";
+import useWeather from "../../../hooks/useWeather";
+import useGeoLocation from "../../../hooks/useGeoLocation";
+import useCityName from "../../../hooks/useCityName";
 
-import capitalizeString from "../../utils/capitalizeString";
+import capitalizeString from "../../../utils/capitalizeString";
 
 import WeatherIcon from "./WeatherIcon";
 import HourlyWeatherCard from "./HourlyWeatherCard";
 
-import mockCities from "../../data/mockCoordinates";
+import mockCities from "../../../data/mockCoordinates";
 
 function WeatherWidget() {
   const [isFahrenheit, setIsFahrenheit] = useState(true);
