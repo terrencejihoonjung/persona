@@ -2,20 +2,31 @@ import WeatherWidget from "../../components/WeatherWidget/WeatherWidget";
 
 function Dashboard() {
   return (
-    <div className="p-6 grid grid-rows-6 grid-cols-6 gap-4 h-[calc(100vh-3rem)]">
-      {/* Daily Stats */}
-      <div className="row-span-1 col-span-4 border shadow rounded">hi</div>
-
-      {/* Weather Widget */}
-      <div className="row-span-2 col-span-2">
-        <WeatherWidget />
+    <div className="p-6 grid grid-rows-12 grid-cols-12 gap-4 h-[calc(100vh-3rem)] overflow-hidden">
+      {/* AI Chat Widget - takes up the full height and 5 columns */}
+      <div className="row-span-12 col-span-5 border shadow rounded">
+        {/* AI Chat Widget content goes here */}
       </div>
 
-      {/* Task Board */}
-      <div className="row-span-5 col-span-4 border shadow rounded">hi</div>
+      {/* Task Board - takes up the top 8 rows of the remaining columns */}
+      <div className="row-span-12 col-span-3 border shadow rounded">
+        {/* Task Board content goes here */}
+      </div>
 
-      {/* Pomodoro Timer */}
-      <div className="row-span-4 col-span-2 border shadow rounded">hi</div>
+      {/* Spotify Widget - takes up the top 2 rows of the last 4 columns */}
+      <div className="row-span-3 col-span-4 border shadow rounded">
+        {/* Spotify Widget content goes here */}
+      </div>
+
+      {/* Pomodoro Timer - takes up the middle 6 rows of the last 4 columns */}
+      <div className="row-span-5 col-span-4 border shadow rounded">
+        {/* Pomodoro Timer content goes here */}
+      </div>
+
+      {/* Weather Widget - takes up the bottom 4 rows of the last 4 columns */}
+      <div className="row-span-4 col-span-4">
+        <WeatherWidget />
+      </div>
     </div>
   );
 }

@@ -23,7 +23,7 @@ function HourlyWeatherCard({
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <h3 className="text-sm font-black">{timeString}</h3>
+      <h3 className="text-xs font-black">{timeString}</h3>
       <img className="w-14 h-14" src={iconUrl} alt="Icon" />
       <p className="text-sm font-semibold">
         {isFahrenheit
