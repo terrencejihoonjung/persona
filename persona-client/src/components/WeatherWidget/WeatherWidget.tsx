@@ -66,7 +66,7 @@ function WeatherWidget() {
               <div className="flex justify-between">
                 <div id="b1" className="flex flex-col items-start">
                   <h3 className="text-lg font-black">{cityName}</h3>
-                  <h1 className="text-6xl font-regular">
+                  <h1 className="text-6xl font-semibold">
                     {isFahrenheit
                       ? `${Math.round(weatherData.current.temp)}°F`
                       : `${Math.round(weatherData.current.tempCelsius)}°C`}

@@ -15,7 +15,7 @@ function Dashboard() {
       </div>
 
       {/* Spotify Widget - takes up the top 2 rows of the last 4 columns */}
-      <div className="row-span-4 col-span-4 border shadow rounded">
+      <div className="row-span-5 col-span-4 border shadow rounded">
         {/* Spotify Widget content goes here */}
       </div>
 
@@ -25,7 +25,7 @@ function Dashboard() {
       </div>
 
       {/* Weather Widget - takes up the bottom 4 rows of the last 4 columns */}
-      <div className="row-span-4 col-span-4">
+      <div className="row-span-3 col-span-4">
         <WeatherWidget />
       </div>
     </div>
