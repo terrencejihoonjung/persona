@@ -7,6 +7,7 @@ function PomodoroTimerWidget() {
   const [mode, setMode] = useState("Pomodoro");
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
@@ -33,6 +34,10 @@ function PomodoroTimerWidget() {
     setIsRunning(false);
   }
 
+  function handleSettingToggle() {
+    setShowSettings(!showSettings);
+  }
+
   function toggleTimer() {
     setIsRunning(!isRunning);
   }
@@ -46,9 +51,12 @@ function PomodoroTimerWidget() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-between border rounded-2xl shadow-lg w-full h-full p-4">
+    <div className="relative flex flex-col items-center justify-between border rounded-2xl shadow-lg w-full h-full p-4">
       <span className="w-full flex justify-end">
-        <SettingButton />
+        <SettingButton
+          showSettings={showSettings}
+          handleSettingToggle={handleSettingToggle}
+        />
       </span>
       <div className="flex flex-col justify-center items-center space-y-8">
         <span className="flex space-x-4 mt-6">
@@ -113,6 +121,15 @@ function PomodoroTimerWidget() {
       <span className="w-full flex justify-end">
         <ExpandButton />
       </span>
+
+      {showSettings && (
+        <div className="p-4 absolute inset-0 w-full h-full bg-white flex justify-center items-center rounded-2xl">
+          {/* Settings content goes here */}
+          <h2 className="text-xl font-semibold mb-4">Settings</h2>
+
+          {/* Add your settings form fields here */}
+        </div>
+      )}
     </div>
   );
 }
