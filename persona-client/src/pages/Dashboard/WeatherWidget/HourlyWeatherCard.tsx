@@ -1,6 +1,7 @@
 import { WeatherData } from "../../../types/WeatherTypes";
 
 type HourlyWeatherCardProps = {
+  timezone: string;
   weatherData: WeatherData;
   isFahrenheit: boolean;
 };
@@ -8,6 +9,7 @@ type HourlyWeatherCardProps = {
 function HourlyWeatherCard({
   isFahrenheit,
   weatherData,
+  timezone,
 }: HourlyWeatherCardProps) {
   // Convert UNIX timestamp to Date object
   const date = new Date(weatherData.dt * 1000);
@@ -17,6 +19,7 @@ function HourlyWeatherCard({
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
+    timeZone: timezone,
   });
 
   const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;

@@ -35,6 +35,7 @@ function useWeather({ latitude, longitude }: Coordinates) {
           }));
 
         setWeatherData({
+          timezone: data.timezone,
           current: {
             dt: data.current.dt,
             temp: data.current.temp,

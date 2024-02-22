@@ -9,7 +9,7 @@ import capitalizeString from "../../../utils/capitalizeString";
 import WeatherIcon from "./WeatherIcon";
 import HourlyWeatherCard from "./HourlyWeatherCard";
 
-import mockCities from "../../../data/mockCoordinates";
+// import mockCities from "../../../data/mockCoordinates";
 
 function WeatherWidget() {
   const [isFahrenheit, setIsFahrenheit] = useState(true);
@@ -89,6 +89,7 @@ function WeatherWidget() {
               {weatherData.hourlyForecastData.map((hourlyData) => (
                 <HourlyWeatherCard
                   key={hourlyData.dt}
+                  timezone={weatherData.timezone}
                   weatherData={hourlyData}
                   isFahrenheit={isFahrenheit}
                 />

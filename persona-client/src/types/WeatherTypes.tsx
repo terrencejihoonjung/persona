@@ -11,6 +11,7 @@ export type WeatherData = {
 };
 
 export type TotalWeatherData = {
+  timezone: string;
   current: WeatherData;
   hourlyForecastData: WeatherData[];
 };
