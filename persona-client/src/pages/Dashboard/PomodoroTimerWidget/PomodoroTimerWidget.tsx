@@ -22,27 +22,29 @@ function PomodoroTimerWidget() {
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
+    // Interval management
     let interval: ReturnType<typeof setInterval> | null = null;
 
     if (isRunning && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
       }, 1000);
-    } else if (interval) {
-      clearInterval(interval);
     }
 
-    if (timeLeft === 0) {
-      audioRef.current.volume = settings.volume / 100; // Set volume level based on settings
-      audioRef.current.play(); // Play the alarm sound
-    }
-
-    // Cleanup function to clear interval when component unmounts or when the timer is paused/stopped
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
+  }, [isRunning, timeLeft]);
+
+  useEffect(() => {
+    // Handle the alarm sound when the time left is zero
+    if (timeLeft === 0) {
+      audioRef.current.volume = settings.volume / 100;
+      audioRef.current.play();
+      endTimer();
+    }
   }, [timeLeft, settings.volume, settings.alarmSound]);
 
   function handleModeChange(mode: string, time: number) {
