@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SettingButton from "./SettingButton";
 import ExpandButton from "./ExpandButton";
 import { formatTimeLeft } from "../../../utils/formatTimeLeft";
@@ -10,9 +10,11 @@ function PomodoroTimerWidget() {
     pomodoro: 25,
     shortBreak: 5,
     longBreak: 10,
-    alarmSound: "Kitchen", // Default alarm sound
+    alarmSound: "kitchen", // Default alarm sound
     volume: 50, // Default volume level
   });
+
+  const audioRef = useRef(new Audio(`/sounds/${settings.alarmSound}.mp3`));
 
   const [mode, setMode] = useState("Pomodoro");
   const [timeLeft, setTimeLeft] = useState(settings.pomodoro * 60);
@@ -30,13 +32,18 @@ function PomodoroTimerWidget() {
       clearInterval(interval);
     }
 
+    if (timeLeft === 0) {
+      audioRef.current.volume = settings.volume / 100; // Set volume level based on settings
+      audioRef.current.play(); // Play the alarm sound
+    }
+
     // Cleanup function to clear interval when component unmounts or when the timer is paused/stopped
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
-  }, [isRunning, timeLeft]);
+  }, [timeLeft, settings.volume, settings.alarmSound]);
 
   function handleModeChange(mode: string, time: number) {
     setMode(mode);

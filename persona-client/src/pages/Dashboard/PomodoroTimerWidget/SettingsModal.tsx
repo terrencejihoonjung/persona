@@ -122,10 +122,10 @@ function SettingsModal({
                 onChange={handleInputChange}
                 className="border w-36 p-1"
               >
-                <option value="Kitchen">Kitchen</option>
-                <option value="Bell">Bell</option>
-                <option value="Bird">Bird</option>
-                <option value="Digital">Digital</option>
+                <option value="kitchen">Kitchen</option>
+                <option value="bell">Bell</option>
+                <option value="bird">Bird</option>
+                <option value="digital">Digital</option>
               </select>
             </span>
 
