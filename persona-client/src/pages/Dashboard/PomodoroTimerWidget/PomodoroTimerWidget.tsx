@@ -59,7 +59,7 @@ function PomodoroTimerWidget() {
         />
       </span>
       <div className="flex flex-col justify-center items-center space-y-8">
-        <span className="flex space-x-4 mt-6">
+        <span className="flex space-x-4">
           <button
             className={`font-semibold ${
               mode === "Pomodoro" ? "text-black" : "text-gray-400"
@@ -86,7 +86,7 @@ function PomodoroTimerWidget() {
           </button>
         </span>
 
-        <h1 className="text-9xl font-bold mb-4">{formatTimeLeft(timeLeft)}</h1>
+        <h1 className="text-9xl font-bold">{formatTimeLeft(timeLeft)}</h1>
         <span className="flex space-x-4">
           <button
             className="px-6 py-2 border rounded-full shadow"
