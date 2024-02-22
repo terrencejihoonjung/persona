@@ -2,10 +2,20 @@ import { useState, useEffect } from "react";
 import SettingButton from "./SettingButton";
 import ExpandButton from "./ExpandButton";
 import { formatTimeLeft } from "../../../utils/formatTimeLeft";
+import SettingsModal from "./SettingsModal";
+import { Settings } from "../../../types/PomodoroTimerTypes";
 
 function PomodoroTimerWidget() {
+  const [settings, setSettings] = useState<Settings>({
+    pomodoro: 25,
+    shortBreak: 5,
+    longBreak: 10,
+    alarmSound: "Kitchen", // Default alarm sound
+    volume: 50, // Default volume level
+  });
+
   const [mode, setMode] = useState("Pomodoro");
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
+  const [timeLeft, setTimeLeft] = useState(settings.pomodoro * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
@@ -44,9 +54,9 @@ function PomodoroTimerWidget() {
 
   function endTimer() {
     if (mode === "Pomodoro") {
-      handleModeChange("Short Break", 5 * 60);
+      handleModeChange("Short Break", settings.shortBreak * 60);
     } else {
-      handleModeChange("Pomodoro", 25 * 60);
+      handleModeChange("Pomodoro", settings.pomodoro * 60);
     }
   }
 
@@ -64,7 +74,7 @@ function PomodoroTimerWidget() {
             className={`font-semibold ${
               mode === "Pomodoro" ? "text-black" : "text-gray-400"
             }`}
-            onClick={() => handleModeChange("Pomodoro", 25 * 60)}
+            onClick={() => handleModeChange("Pomodoro", settings.pomodoro * 60)}
           >
             Pomodoro
           </button>
@@ -72,7 +82,9 @@ function PomodoroTimerWidget() {
             className={`font-semibold ${
               mode === "Short Break" ? "text-black" : "text-gray-400"
             }`}
-            onClick={() => handleModeChange("Short Break", 5 * 60)}
+            onClick={() =>
+              handleModeChange("Short Break", settings.shortBreak * 60)
+            }
           >
             Short Break
           </button>
@@ -80,7 +92,9 @@ function PomodoroTimerWidget() {
             className={`font-semibold ${
               mode === "Long Break" ? "text-black" : "text-gray-400"
             }`}
-            onClick={() => handleModeChange("Long Break", 10 * 60)}
+            onClick={() =>
+              handleModeChange("Long Break", settings.longBreak * 60)
+            }
           >
             Long Break
           </button>
@@ -123,12 +137,11 @@ function PomodoroTimerWidget() {
       </span>
 
       {showSettings && (
-        <div className="p-4 absolute inset-0 w-full h-full bg-white flex justify-center items-center rounded-2xl">
-          {/* Settings content goes here */}
-          <h2 className="text-xl font-semibold mb-4">Settings</h2>
-
-          {/* Add your settings form fields here */}
-        </div>
+        <SettingsModal
+          settings={settings}
+          setSettings={setSettings}
+          setShowSettings={setShowSettings}
+        />
       )}
     </div>
   );
