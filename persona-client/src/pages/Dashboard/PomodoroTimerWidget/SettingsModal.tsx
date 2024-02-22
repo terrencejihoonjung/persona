@@ -5,12 +5,14 @@ type SettingsModalProps = {
   settings: Settings;
   setShowSettings: React.Dispatch<React.SetStateAction<boolean>>;
   setSettings: React.Dispatch<React.SetStateAction<Settings>>;
+  handleModeChange: (mode: string, time: number) => void;
 };
 
 function SettingsModal({
   setShowSettings,
   settings,
   setSettings,
+  handleModeChange,
 }: SettingsModalProps) {
   const [currSettings, setCurrSettings] = useState<Settings>(settings);
 
@@ -28,6 +30,7 @@ function SettingsModal({
     e.preventDefault();
     setSettings(currSettings);
     setShowSettings(false);
+    handleModeChange("Pomodoro", currSettings.pomodoro * 60);
   };
 
   return (
@@ -147,12 +150,14 @@ function SettingsModal({
         </div>
 
         {/* Save button */}
-        <button
-          type="submit"
-          className="flex justify-end mt-4 bg-black text-white px-4 py-2 rounded-xl shadow"
-        >
-          Save
-        </button>
+        <div className="flex mt-4">
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded-xl shadow"
+          >
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );

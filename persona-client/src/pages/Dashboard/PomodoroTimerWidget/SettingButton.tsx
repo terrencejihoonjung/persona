@@ -8,7 +8,7 @@ function SettingButton({
   handleSettingToggle,
 }: SettingButtonProps) {
   return (
-    <button className="z-10" onClick={handleSettingToggle}>
+    <button className="z-20" onClick={handleSettingToggle}>
       {showSettings ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -141,6 +141,7 @@ function PomodoroTimerWidget() {
           settings={settings}
           setSettings={setSettings}
           setShowSettings={setShowSettings}
+          handleModeChange={handleModeChange}
         />
       )}
     </div>
