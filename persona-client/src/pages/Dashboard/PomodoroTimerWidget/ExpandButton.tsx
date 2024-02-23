@@ -1,6 +1,10 @@
-function ExpandButton() {
+type ExpandButtonProps = {
+  toggleFullScreen: () => void;
+};
+
+function ExpandButton({ toggleFullScreen }: ExpandButtonProps) {
   return (
-    <button>
+    <button onClick={toggleFullScreen}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

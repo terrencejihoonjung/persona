@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import SettingButton from "./SettingButton";
 import ExpandButton from "./ExpandButton";
+import useFullScreen from "../../../hooks/useFullScreen";
 import { formatTimeLeft } from "../../../utils/formatTimeLeft";
 import SettingsModal from "./SettingsModal";
 import { Settings } from "../../../types/PomodoroTimerTypes";
@@ -15,11 +16,13 @@ function PomodoroTimerWidget() {
   });
 
   const audioRef = useRef(new Audio(`/sounds/${settings.alarmSound}.mp3`));
+  const fullScreenRef = useRef<HTMLDivElement>(null);
 
   const [mode, setMode] = useState("Pomodoro");
   const [timeLeft, setTimeLeft] = useState(settings.pomodoro * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const { enter, exit, isFullScreen } = useFullScreen();
 
   useEffect(() => {
     // Interval management
@@ -46,6 +49,14 @@ function PomodoroTimerWidget() {
       endTimer();
     }
   }, [timeLeft, settings.volume, settings.alarmSound]);
+
+  const toggleFullScreen = () => {
+    if (isFullScreen()) {
+      exit();
+    } else if (fullScreenRef.current) {
+      enter(fullScreenRef.current);
+    }
+  };
 
   function handleModeChange(mode: string, time: number) {
     setMode(mode);
@@ -76,7 +87,10 @@ function PomodoroTimerWidget() {
           handleSettingToggle={handleSettingToggle}
         />
       </span>
-      <div className="flex flex-col justify-center items-center space-y-8">
+      <div
+        ref={fullScreenRef}
+        className="bg-white flex flex-col justify-center items-center space-y-8"
+      >
         <span className="flex space-x-4">
           <button
             className={`font-semibold ${
@@ -141,7 +155,7 @@ function PomodoroTimerWidget() {
       </div>
 
       <span className="w-full flex justify-end">
-        <ExpandButton />
+        <ExpandButton toggleFullScreen={toggleFullScreen} />
       </span>
 
       {showSettings && (
