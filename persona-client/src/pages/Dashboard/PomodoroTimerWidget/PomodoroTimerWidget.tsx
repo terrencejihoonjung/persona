@@ -55,10 +55,7 @@ function PomodoroTimerWidget() {
 
   function handleSettingToggle() {
     setShowSettings(!showSettings);
-  }
-
-  function toggleTimer() {
-    setIsRunning(!isRunning);
+    setIsRunning(false);
   }
 
   function endTimer() {
@@ -113,7 +110,7 @@ function PomodoroTimerWidget() {
         <span className="flex space-x-4">
           <button
             className="px-6 py-2 border rounded-full shadow"
-            onClick={toggleTimer}
+            onClick={() => setIsRunning(!isRunning)}
           >
             {isRunning ? "Pause" : "Start"}
           </button>
@@ -147,10 +144,12 @@ function PomodoroTimerWidget() {
 
       {showSettings && (
         <SettingsModal
+          mode={mode}
+          timeLeft={timeLeft}
+          setTimeLeft={setTimeLeft}
           settings={settings}
           setSettings={setSettings}
           setShowSettings={setShowSettings}
-          handleModeChange={handleModeChange}
         />
       )}
     </div>

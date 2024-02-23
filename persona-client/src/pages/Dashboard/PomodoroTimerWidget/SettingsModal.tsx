@@ -2,17 +2,21 @@ import { useState } from "react";
 import { Settings } from "../../../types/PomodoroTimerTypes";
 
 type SettingsModalProps = {
+  mode: string;
   settings: Settings;
   setShowSettings: React.Dispatch<React.SetStateAction<boolean>>;
   setSettings: React.Dispatch<React.SetStateAction<Settings>>;
-  handleModeChange: (mode: string, time: number) => void;
+  timeLeft: number;
+  setTimeLeft: React.Dispatch<React.SetStateAction<number>>;
 };
 
 function SettingsModal({
   setShowSettings,
   settings,
   setSettings,
-  handleModeChange,
+  mode,
+  timeLeft,
+  setTimeLeft,
 }: SettingsModalProps) {
   const [currSettings, setCurrSettings] = useState<Settings>(settings);
 
@@ -20,6 +24,7 @@ function SettingsModal({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+
     setCurrSettings((prevSettings) => ({
       ...prevSettings,
       [name]: value,
@@ -29,17 +34,38 @@ function SettingsModal({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSettings(currSettings);
+
+    // Calculate new time left based on the current mode and new settings
+    let newTimeLeft;
+    switch (mode) {
+      case "Pomodoro":
+        newTimeLeft =
+          Math.abs(
+            currSettings.pomodoro - (settings.pomodoro - timeLeft / 60)
+          ) * 60;
+        break;
+      case "Short Break":
+        newTimeLeft = currSettings.shortBreak * 60;
+        break;
+      case "Long Break":
+        newTimeLeft = currSettings.longBreak * 60;
+        break;
+      default:
+        newTimeLeft = timeLeft; // Keep the current timeLeft if the mode doesn't match
+    }
+
+    // Update the timeLeft state with the new calculated time
+    setTimeLeft(newTimeLeft);
     setShowSettings(false);
-    handleModeChange("Pomodoro", currSettings.pomodoro * 60);
   };
 
   return (
     <div className="absolute inset-0 flex flex-col rounded-2xl w-full h-full p-4 z-10 bg-white">
       <form
-        className="flex flex-col justify-between w-full h-full"
+        className="flex flex-col justify-between w-full h-full mt-10"
         onSubmit={handleSubmit}
       >
-        <div className="space-y-8">
+        <div className="space-y-12">
           {/* Timer settings */}
           <div className="space-y-2">
             <span>
