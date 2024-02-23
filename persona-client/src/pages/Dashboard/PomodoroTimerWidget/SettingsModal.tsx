@@ -54,10 +54,16 @@ function SettingsModal({
           ) * 60;
         break;
       case "Short Break":
-        newTimeLeft = currSettings.shortBreak * 60;
+        newTimeLeft =
+          Math.abs(
+            currSettings.shortBreak - (settings.shortBreak - timeLeft / 60)
+          ) * 60;
         break;
       case "Long Break":
-        newTimeLeft = currSettings.longBreak * 60;
+        newTimeLeft =
+          Math.abs(
+            currSettings.longBreak - (settings.longBreak - timeLeft / 60)
+          ) * 60;
         break;
       default:
         newTimeLeft = timeLeft; // Keep the current timeLeft if the mode doesn't match
