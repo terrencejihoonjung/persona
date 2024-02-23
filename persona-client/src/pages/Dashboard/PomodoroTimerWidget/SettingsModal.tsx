@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Settings } from "../../../types/PomodoroTimerTypes";
 
 type SettingsModalProps = {
+  audioPlayer: HTMLAudioElement;
   mode: string;
   settings: Settings;
   setShowSettings: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,6 +12,7 @@ type SettingsModalProps = {
 };
 
 function SettingsModal({
+  audioPlayer,
   setShowSettings,
   settings,
   setSettings,
@@ -27,8 +29,15 @@ function SettingsModal({
 
     setCurrSettings((prevSettings) => ({
       ...prevSettings,
-      [name]: value,
+      [name]: name === "volume" ? parseInt(value, 10) : value,
     }));
+
+    if (name === "volume") {
+      const volumeLevel = parseInt(value, 10) / 100; // Convert volume to a 0-1 range
+      audioPlayer.volume = volumeLevel;
+      audioPlayer.currentTime = 0; // Reset audio to start
+      audioPlayer.play();
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,6 +66,8 @@ function SettingsModal({
     // Update the timeLeft state with the new calculated time
     setTimeLeft(newTimeLeft);
     setShowSettings(false);
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0; // Reset audio to start
   };
 
   return (
@@ -148,9 +159,6 @@ function SettingsModal({
                 onChange={handleInputChange}
                 className="border w-36 p-1"
               >
-                <option value="kitchen">Kitchen</option>
-                <option value="bell">Bell</option>
-                <option value="bird">Bird</option>
                 <option value="digital">Digital</option>
               </select>
             </span>

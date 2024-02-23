@@ -10,7 +10,7 @@ function PomodoroTimerWidget() {
     pomodoro: 25,
     shortBreak: 5,
     longBreak: 10,
-    alarmSound: "kitchen", // Default alarm sound
+    alarmSound: "digital", // Default alarm sound
     volume: 50, // Default volume level
   });
 
@@ -54,6 +54,8 @@ function PomodoroTimerWidget() {
   }
 
   function handleSettingToggle() {
+    audioRef.current.pause(); // Pauses the audio
+    audioRef.current.currentTime = 0; // Resets the audio
     setShowSettings(!showSettings);
     setIsRunning(false);
   }
@@ -144,6 +146,7 @@ function PomodoroTimerWidget() {
 
       {showSettings && (
         <SettingsModal
+          audioPlayer={audioRef.current}
           mode={mode}
           timeLeft={timeLeft}
           setTimeLeft={setTimeLeft}
