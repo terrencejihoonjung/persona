@@ -24,7 +24,7 @@ function SortableItem({ task, handleCheckboxChange }: SortableItemProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="flex items-center justify-between p-3 mt-2 border-2 rounded-xl cursor-pointer w-full"
+      className="flex items-center justify-start p-3 mt-2 border-2 rounded-xl w-full"
     >
       <input
         type="checkbox"
@@ -33,7 +33,7 @@ function SortableItem({ task, handleCheckboxChange }: SortableItemProps) {
         checked={task.completed}
         onChange={(e) => handleCheckboxChange(task.id, e.target.checked)}
       />
-      <p className="flex-1 text-md font-semibold">{task.text}</p>
+      <p className="flex text-md font-semibold">{task.text}</p>
     </div>
   );
 }

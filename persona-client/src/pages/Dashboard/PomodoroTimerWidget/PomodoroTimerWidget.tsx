@@ -23,6 +23,7 @@ function PomodoroTimerWidget() {
   const [isRunning, setIsRunning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const { enter, exit, isFullScreen } = useFullScreen();
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     // Interval management
@@ -52,8 +53,10 @@ function PomodoroTimerWidget() {
 
   const toggleFullScreen = () => {
     if (isFullScreen()) {
+      setFullscreen(false);
       exit();
     } else if (fullScreenRef.current) {
+      setFullscreen(true);
       enter(fullScreenRef.current);
     }
   };
@@ -89,7 +92,9 @@ function PomodoroTimerWidget() {
       </span>
       <div
         ref={fullScreenRef}
-        className="bg-white flex flex-col justify-center items-center space-y-8"
+        className={`${
+          fullscreen ? `bg-white` : null
+        } flex flex-col justify-center items-center space-y-8`}
       >
         <span className="flex space-x-4">
           <button

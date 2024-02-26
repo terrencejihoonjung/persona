@@ -14,6 +14,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import SortableItem from "./SortableItem";
+import TaskModal from "./TaskModal";
 import { Task } from "../../../types/TaskTypes";
 
 function TaskWidget() {
@@ -23,6 +24,29 @@ function TaskWidget() {
     { id: 3, text: "Eat", completed: false },
     { id: 4, text: "Sleep", completed: false },
   ]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+
+  const openEditModal = (task: Task) => {
+    setEditingTask(task); // Set the task to be edited
+    setIsModalOpen(true); // Open the modal
+  };
+
+  const handleSaveTask = (savedTask: Task) => {
+    // Logic to save the task
+    setTasks((tasks) =>
+      tasks.map((task) => {
+        return task.id === savedTask.id ? savedTask : task;
+      })
+    );
+    setEditingTask(null);
+    setIsModalOpen(false); // Close the modal
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTask(null);
+    setIsModalOpen(false); // Close the modal
+  };
 
   // Actively detects mouse clicks and or touch (finger click)
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
@@ -39,19 +63,21 @@ function TaskWidget() {
 
       // create a new array where the item at oldIndex has been moved to newIndex
       setTasks(arrayMove(tasks, oldIndex, newIndex));
+    } else if (over && active.id === over.id) {
+      openEditModal(tasks.find((task) => task.id === Number(active.id))!);
     }
   };
 
   // Creates a new array with updated check
-  const handleCheckboxChange = (id: number, completed: boolean) => {
+  const handleCheckboxChange = (id: number, checked: boolean) => {
     setTasks((tasks) =>
-      tasks.map((task) => (task.id === id ? { ...task, completed } : task))
+      tasks.map((task) => (task.id === id ? { ...task, checked } : task))
     );
   };
 
   return (
-    <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full p-4">
-      <div className="px-5 py-4 border-b w-full">
+    <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full">
+      <div className="pl-5 pt-4 pb-2 border-b w-full">
         <h2 className="text-xl font-bold">Tasks</h2>
       </div>
 
@@ -66,13 +92,23 @@ function TaskWidget() {
           items={tasks.map((task) => task.id)} // Items with unique identifiers
           strategy={verticalListSortingStrategy} // sorting strategy optimized for vertical lists
         >
-          {tasks.map((task) => (
-            <SortableItem
-              key={task.id}
-              task={task}
-              handleCheckboxChange={handleCheckboxChange}
-            />
-          ))}
+          <div className="px-3 py-2 w-full h-full overflow-y-auto">
+            {tasks.map((task) => (
+              <SortableItem
+                key={task.id}
+                task={task}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            ))}
+            {isModalOpen && (
+              <TaskModal
+                task={editingTask}
+                onSave={handleSaveTask}
+                onCancel={handleCancelEdit}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            )}
+          </div>
         </SortableContext>
       </DndContext>
     </div>

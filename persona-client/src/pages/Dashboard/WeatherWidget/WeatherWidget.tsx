@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ToggleSwitch from "../../../ToggleSwitch";
+import ToggleSwitch from "./ToggleSwitch";
 import useWeather from "../../../hooks/useWeather";
 import useGeoLocation from "../../../hooks/useGeoLocation";
 import useCityName from "../../../hooks/useCityName";
