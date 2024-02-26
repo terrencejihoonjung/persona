@@ -16,13 +16,13 @@ function Dashboard() {
         {/* Session */}
       </div>
 
-      <div className="row-span-3 border shadow rounded">{/* Spotify */}</div>
+      <div className="row-span-2 border shadow rounded">{/* Spotify */}</div>
 
       <div className="row-span-5">
         <PomodoroTimerWidget />
       </div>
 
-      <div className="row-span-4">
+      <div className="row-span-5">
         <WeatherWidget />
       </div>
     </div>
