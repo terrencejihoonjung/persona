@@ -13,11 +13,10 @@ function SortableItem({ task, handleCheckboxChange }: SortableItemProps) {
     useSortable({ id: task.id });
 
   const style = {
+    // Need to convert transform object into CSS transform string
     transform: CSS.Transform.toString(transform),
     transition,
   };
-
-  // Here, we directly call onCheckboxChange with the task's id and the new checked state.
 
   return (
     <div
@@ -34,12 +33,7 @@ function SortableItem({ task, handleCheckboxChange }: SortableItemProps) {
         checked={task.completed}
         onChange={(e) => handleCheckboxChange(task.id, e.target.checked)}
       />
-      <label
-        htmlFor={`task-${task.id}`}
-        className="flex-1 text-md font-semibold"
-      >
-        {task.text}
-      </label>
+      <p className="flex-1 text-md font-semibold">{task.text}</p>
     </div>
   );
 }
