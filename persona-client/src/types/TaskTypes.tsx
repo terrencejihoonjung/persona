@@ -1,9 +1,9 @@
 export type Task = {
   id: number;
   text: string;
-  description?: string;
+  description: string;
   completed: boolean;
-  subtasks?: SubTask[];
+  subtasks: SubTask[];
 };
 
 export type SubTask = {

@@ -1,9 +1,9 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Task } from "../../../types/TaskTypes";
+import { Task, SubTask } from "../../../types/TaskTypes";
 
 type SortableItemProps = {
-  task: Task;
+  task: Task | SubTask;
   handleCheckboxChange: (id: number, completed: boolean) => void;
 };
 

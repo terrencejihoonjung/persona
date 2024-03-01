@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Task } from "../../../types/TaskTypes";
+import { Task, SubTask } from "../../../types/TaskTypes";
 import {
   DndContext,
   DragEndEvent,
@@ -29,8 +29,8 @@ function TaskModal({
   onCancel,
   handleCheckboxChange,
 }: TaskModalProps) {
-  const [taskState, setTaskState] = useState<Task | null>(task);
-  const [subtasks, setSubtasks] = useState<Task[]>(task?.subtasks || []);
+  const [taskState, setTaskState] = useState<Task>(task!);
+  const [subtasks, setSubtasks] = useState<SubTask[]>(task!.subtasks);
 
   // Actively detects mouse clicks and or touch (finger click)
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
@@ -63,27 +63,32 @@ function TaskModal({
 
   return (
     <div className="z-30 fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-      <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 lg:w-1/3 shadow-lg rounded-md bg-white">
-        <h3 className="text-xl font-bold mb-4">
-          {task ? "Edit Task" : "New Task"}
-        </h3>
+      <div className="relative top-40 mx-auto p-12 border w-11/12 md:w-1/2 lg:w-1/2 shadow-lg rounded-2xl bg-white">
         <input
           type="text"
-          value={taskState!.text}
-          onChange={(e) =>
-            setTaskState({ ...taskState!, text: e.target.value })
-          }
-          className="w-full px-3 py-2 mb-4 border rounded"
+          value={taskState.text}
+          onChange={(e) => setTaskState({ ...taskState, text: e.target.value })}
+          className="appearance-none outline-none mb-10 font-bold text-3xl"
           placeholder="Task Name"
         />
+
+        <label
+          htmlFor="taskDescription"
+          className="block text-xl font-semibold mb-2"
+        >
+          Description
+        </label>
         <textarea
+          id="taskDescription"
           value={taskState!.description}
           onChange={(e) =>
             setTaskState({ ...taskState!, description: e.target.value })
           }
-          className="w-full px-3 py-2 mb-4 border rounded"
+          className="w-full px-3 py-2 mb-8 border rounded-2xl"
           placeholder="Description"
         ></textarea>
+
+        <h2 className="font-semibold text-xl">Sub-Tasks</h2>
         <DndContext
           sensors={sensors} // Listens for user input (click -> drag)
           collisionDetection={closestCenter} // uses closestCenter algorithm for collision handling
@@ -101,16 +106,16 @@ function TaskModal({
             ))}
           </SortableContext>
         </DndContext>
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-8">
           <button
             onClick={handleSave}
-            className="px-4 py-2 mr-3 text-white bg-blue-500 rounded hover:bg-blue-700"
+            className="px-4 py-2 mr-3 text-white bg-blue-500 rounded-2xl hover:bg-blue-700"
           >
             Save
           </button>
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-white bg-gray-400 rounded hover:bg-gray-600"
+            className="px-4 py-2 text-white bg-gray-400 rounded-2xl hover:bg-gray-600"
           >
             Cancel
           </button>

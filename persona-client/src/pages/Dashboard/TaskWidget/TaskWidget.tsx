@@ -19,10 +19,37 @@ import { Task } from "../../../types/TaskTypes";
 
 function TaskWidget() {
   const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, text: "Go Shopping", completed: false },
-    { id: 2, text: "Study", completed: false },
-    { id: 3, text: "Eat", completed: false },
-    { id: 4, text: "Sleep", completed: false },
+    {
+      id: 1,
+      text: "Go Shopping",
+      description: "this is desc",
+      completed: false,
+      subtasks: [
+        { id: 1, text: "Go Shopping", completed: false },
+        { id: 2, text: "Study", completed: false },
+      ],
+    },
+    {
+      id: 2,
+      text: "Study",
+      description: "this is desc",
+      completed: false,
+      subtasks: [],
+    },
+    {
+      id: 3,
+      text: "Eat",
+      description: "this is desc",
+      completed: false,
+      subtasks: [],
+    },
+    {
+      id: 4,
+      text: "Sleep",
+      description: "this is desc",
+      completed: false,
+      subtasks: [],
+    },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
