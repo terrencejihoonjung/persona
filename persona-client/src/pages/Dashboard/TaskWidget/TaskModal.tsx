@@ -51,7 +51,7 @@ function TaskModal({ task, onSave, onCancel }: TaskModalProps) {
           onChange={(e) =>
             setTaskState({ ...taskState!, description: e.target.value })
           }
-          className="w-full px-3 py-2 mb-8 border rounded-2xl"
+          className="w-full px-3 py-2 mb-8 border-gray-400 border rounded-2xl"
           placeholder="Description"
         ></textarea>
 
@@ -74,13 +74,13 @@ function TaskModal({ task, onSave, onCancel }: TaskModalProps) {
         <div className="flex justify-end mt-8">
           <button
             onClick={handleSave}
-            className="px-4 py-2 mr-3 text-white bg-blue-500 rounded-2xl hover:bg-blue-700"
+            className="px-6 py-3 mr-3 text-white bg-blue-500 rounded-2xl hover:bg-blue-700"
           >
             Save
           </button>
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-white bg-gray-400 rounded-2xl hover:bg-gray-600"
+            className="px-6 py-3 text-white bg-gray-500 rounded-2xl hover:bg-gray-700"
           >
             Cancel
           </button>
