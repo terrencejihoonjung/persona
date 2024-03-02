@@ -63,7 +63,7 @@ function TaskModal({
 
   return (
     <div className="z-30 fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-      <div className="relative top-40 mx-auto p-12 border w-11/12 md:w-1/2 lg:w-1/2 shadow-lg rounded-2xl bg-white">
+      <div className="relative top-20 mx-auto p-12 border w-1/2 shadow-lg rounded-2xl bg-white">
         <input
           type="text"
           value={taskState.text}
