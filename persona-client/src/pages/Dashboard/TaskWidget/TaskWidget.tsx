@@ -193,31 +193,35 @@ function TaskWidget() {
   };
 
   const handleAddNewTask = () => {
-    // Open the modal with an empty task object
-    setEditingTask({
-      id: "",
-      text: "",
+    const newTask = {
+      id: `task-${Date.now()}`,
+      text: "Untitled",
       description: "",
       completed: false,
       type: "task",
       subtasks: [],
-    });
+    };
+
+    setEditingTask(newTask);
     setIsModalOpen(true);
   };
 
-  const handleUpdateTask = (savedTask: Task) => {
-    // Logic to save the task
-    setTasks((tasks) =>
-      tasks.map((task) => {
-        return task.id === savedTask.id ? savedTask : task;
-      })
-    );
-    setEditingTask({} as Task);
-    setIsModalOpen(false); // Close the modal
+  const handleSaveTask = (savedTask: Task) => {
+    const taskExists = tasks.find((task) => task.id === savedTask.id);
+
+    if (taskExists) {
+      setTasks((currentTasks) =>
+        currentTasks.map((task) =>
+          task.id === savedTask.id ? savedTask : task
+        )
+      );
+    } else {
+      setTasks((prevTasks) => [savedTask, ...prevTasks]);
+    }
   };
 
-  const handleDeleteTask = (id: string) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  const handleDeleteTask = (taskId: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     setIsModalOpen(false);
   };
 
@@ -252,20 +256,18 @@ function TaskWidget() {
           {(isDragging) => (
             <div className="pb-2 w-full h-full overflow-x-hidden overflow-y-auto">
               {tasks.map((task) => (
-                <>
-                  <SortableItem
-                    key={task.id}
-                    task={task}
-                    isDragging={isDragging}
-                    openEditModal={openEditModal}
-                    handleCheckboxChange={handleCheckboxChange}
-                  />
-                </>
+                <SortableItem
+                  key={task.id}
+                  task={task}
+                  isDragging={isDragging}
+                  openEditModal={openEditModal}
+                  handleCheckboxChange={handleCheckboxChange}
+                />
               ))}
               {isModalOpen && (
                 <TaskModal
                   task={editingTask}
-                  onSave={handleUpdateTask}
+                  onSave={handleSaveTask}
                   onExit={handleExitModal}
                   onDelete={handleDeleteTask}
                 />
