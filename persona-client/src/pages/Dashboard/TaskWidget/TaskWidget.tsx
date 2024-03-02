@@ -1,18 +1,5 @@
 import { useState } from "react";
-import {
-  DndContext,
-  DragEndEvent,
-  closestCenter,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import DraggableList from "../../../components/ui/DraggableList";
 import SortableItem from "./SortableItem";
 import TaskModal from "./TaskModal";
 import { Task } from "../../../types/TaskTypes";
@@ -20,39 +7,185 @@ import { Task } from "../../../types/TaskTypes";
 function TaskWidget() {
   const [tasks, setTasks] = useState<Task[]>([
     {
-      id: 1,
+      id: "task-1",
       text: "Go Shopping",
       description: "this is desc",
-      completed: false,
+      completed: true,
+      type: "task",
       subtasks: [
-        { id: 1, text: "Go Shopping", completed: false },
-        { id: 2, text: "Study", completed: false },
+        {
+          id: "subtask-1-1",
+          text: "Get Bananas",
+          completed: true,
+          type: "subtask",
+        },
+        {
+          id: "subtask-1-2",
+          text: "Buy water",
+          completed: true,
+          type: "subtask",
+        },
       ],
     },
     {
-      id: 2,
-      text: "Study",
-      description: "this is desc",
+      id: "task-2",
+      text: "Complete Homework",
+      description: "Finish all assigned tasks for the week",
       completed: false,
-      subtasks: [],
+      type: "task",
+      subtasks: [
+        {
+          id: "subtask-2-1",
+          text: "Math exercises",
+          completed: true,
+          type: "subtask",
+        },
+        {
+          id: "subtask-2-2",
+          text: "Science project",
+          completed: true,
+          type: "subtask",
+        },
+      ],
     },
     {
-      id: 3,
-      text: "Eat",
-      description: "this is desc",
+      id: "task-3",
+      text: "House Cleaning",
+      description: "General cleaning and organizing the house",
       completed: false,
-      subtasks: [],
+      type: "task",
+      subtasks: [
+        {
+          id: "subtask-3-1",
+          text: "Vacuum living room",
+          completed: false,
+          type: "subtask",
+        },
+        {
+          id: "subtask-3-2",
+          text: "Clean windows",
+          completed: false,
+          type: "subtask",
+        },
+        {
+          id: "subtask-3-3",
+          text: "Organize bookshelf",
+          completed: true,
+          type: "subtask",
+        },
+      ],
     },
     {
-      id: 4,
-      text: "Sleep",
-      description: "this is desc",
+      id: "task-4",
+      text: "Prepare Dinner",
+      description: "Cook a healthy meal for the family",
       completed: false,
-      subtasks: [],
+      type: "task",
+      subtasks: [
+        {
+          id: "subtask-4-1",
+          text: "Chop vegetables",
+          completed: true,
+          type: "subtask",
+        },
+        {
+          id: "subtask-4-2",
+          text: "Marinate chicken",
+          completed: false,
+          type: "subtask",
+        },
+        {
+          id: "subtask-4-3",
+          text: "Set the table",
+          completed: false,
+          type: "subtask",
+        },
+      ],
+    },
+    {
+      id: "task-5",
+      text: "Morning Routine",
+      description: "Start the day with productive habits",
+      completed: false,
+      type: "task",
+      subtasks: [
+        {
+          id: "subtask-5-1",
+          text: "Meditation",
+          completed: false,
+          type: "subtask",
+        },
+        {
+          id: "subtask-5-2",
+          text: "Journaling",
+          completed: true,
+          type: "subtask",
+        },
+        {
+          id: "subtask-5-3",
+          text: "Exercise",
+          completed: false,
+          type: "subtask",
+        },
+      ],
+    },
+    {
+      id: "task-6",
+      text: "Office Work",
+      description: "Complete daily work assignments",
+      completed: false,
+      type: "task",
+      subtasks: [
+        {
+          id: "subtask-6-1",
+          text: "Check emails",
+          completed: true,
+          type: "subtask",
+        },
+        {
+          id: "subtask-6-2",
+          text: "Team meeting",
+          completed: false,
+          type: "subtask",
+        },
+        {
+          id: "subtask-6-3",
+          text: "Project development",
+          completed: false,
+          type: "subtask",
+        },
+      ],
+    },
+    {
+      id: "task-7",
+      text: "Learning Guitar",
+      description: "Practice guitar for 30 minutes",
+      completed: false,
+      type: "task",
+      subtasks: [
+        {
+          id: "subtask-7-1",
+          text: "Tuning",
+          completed: false,
+          type: "subtask",
+        },
+        {
+          id: "subtask-7-2",
+          text: "Scale practice",
+          completed: false,
+          type: "subtask",
+        },
+        {
+          id: "subtask-7-3",
+          text: "Learn new song",
+          completed: false,
+          type: "subtask",
+        },
+      ],
     },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editingTask, setEditingTask] = useState<Task>({} as Task);
 
   const openEditModal = (task: Task) => {
     setEditingTask(task); // Set the task to be edited
@@ -66,39 +199,19 @@ function TaskWidget() {
         return task.id === savedTask.id ? savedTask : task;
       })
     );
-    setEditingTask(null);
+    setEditingTask({} as Task);
     setIsModalOpen(false); // Close the modal
   };
 
   const handleCancelEdit = () => {
-    setEditingTask(null);
+    setEditingTask({} as Task);
     setIsModalOpen(false); // Close the modal
   };
 
-  // Actively detects mouse clicks and or touch (finger click)
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-
-  // Handles the re-ordering of tasks after a drag-drop action
-  const handleDragEnd = (e: DragEndEvent) => {
-    // active is the task being dragged, over is the task the active was dropped over
-    const { active, over } = e;
-
-    // If we dropped over a task and active and over are different tasks
-    if (over && active.id !== over.id) {
-      const oldIndex = tasks.findIndex((task) => task.id === Number(active.id));
-      const newIndex = tasks.findIndex((task) => task.id === Number(over.id));
-
-      // create a new array where the item at oldIndex has been moved to newIndex
-      setTasks(arrayMove(tasks, oldIndex, newIndex));
-    } else if (over && active.id === over.id) {
-      openEditModal(tasks.find((task) => task.id === Number(active.id))!);
-    }
-  };
-
   // Creates a new array with updated check
-  const handleCheckboxChange = (id: number, checked: boolean) => {
-    setTasks((tasks) =>
-      tasks.map((task) => (task.id === id ? { ...task, checked } : task))
+  const handleCheckboxChange = (id: string, completed: boolean) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === id ? { ...task, completed } : task))
     );
   };
 
@@ -109,21 +222,15 @@ function TaskWidget() {
       </div>
 
       {/* DndContext uses Context API to share data between draggable and droppable components and hooks */}
-      <DndContext
-        sensors={sensors} // Listens for user input (click -> drag)
-        collisionDetection={closestCenter} // uses closestCenter algorithm for collision handling
-        onDragEnd={handleDragEnd} // Fires after a draggable item is dropped.
-      >
-        {/* Sortable Context allows us to work with a sortable list of elements */}
-        <SortableContext
-          items={tasks.map((task) => task.id)} // Items with unique identifiers
-          strategy={verticalListSortingStrategy} // sorting strategy optimized for vertical lists
-        >
-          <div className="px-3 py-2 w-full h-full overflow-y-auto">
+      <DraggableList items={tasks} onDragEnd={setTasks}>
+        {(isDragging) => (
+          <div className="px-3 py-2 w-full h-full overflow-x-hidden overflow-y-auto">
             {tasks.map((task) => (
               <SortableItem
                 key={task.id}
                 task={task}
+                isDragging={isDragging}
+                openEditModal={openEditModal}
                 handleCheckboxChange={handleCheckboxChange}
               />
             ))}
@@ -132,12 +239,11 @@ function TaskWidget() {
                 task={editingTask}
                 onSave={handleSaveTask}
                 onCancel={handleCancelEdit}
-                handleCheckboxChange={handleCheckboxChange}
               />
             )}
           </div>
-        </SortableContext>
-      </DndContext>
+        )}
+      </DraggableList>
     </div>
   );
 }
