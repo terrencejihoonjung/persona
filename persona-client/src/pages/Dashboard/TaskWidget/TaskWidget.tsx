@@ -192,7 +192,20 @@ function TaskWidget() {
     setIsModalOpen(true); // Open the modal
   };
 
-  const handleSaveTask = (savedTask: Task) => {
+  const handleAddNewTask = () => {
+    // Open the modal with an empty task object
+    setEditingTask({
+      id: "",
+      text: "",
+      description: "",
+      completed: false,
+      type: "task",
+      subtasks: [],
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateTask = (savedTask: Task) => {
     // Logic to save the task
     setTasks((tasks) =>
       tasks.map((task) => {
@@ -203,7 +216,12 @@ function TaskWidget() {
     setIsModalOpen(false); // Close the modal
   };
 
-  const handleCancelEdit = () => {
+  const handleDeleteTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setIsModalOpen(false);
+  };
+
+  const handleExitModal = () => {
     setEditingTask({} as Task);
     setIsModalOpen(false); // Close the modal
   };
@@ -217,33 +235,45 @@ function TaskWidget() {
 
   return (
     <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full">
-      <div className="pl-5 pt-4 pb-2 border-b w-full">
+      <div className="pl-4 pt-4 pb-2 border-b w-full">
         <h2 className="text-xl font-bold">Tasks</h2>
       </div>
 
-      {/* DndContext uses Context API to share data between draggable and droppable components and hooks */}
-      <DraggableList items={tasks} onDragEnd={setTasks}>
-        {(isDragging) => (
-          <div className="px-3 py-2 w-full h-full overflow-x-hidden overflow-y-auto">
-            {tasks.map((task) => (
-              <SortableItem
-                key={task.id}
-                task={task}
-                isDragging={isDragging}
-                openEditModal={openEditModal}
-                handleCheckboxChange={handleCheckboxChange}
-              />
-            ))}
-            {isModalOpen && (
-              <TaskModal
-                task={editingTask}
-                onSave={handleSaveTask}
-                onCancel={handleCancelEdit}
-              />
-            )}
-          </div>
-        )}
-      </DraggableList>
+      <div className="w-full px-3">
+        <div
+          className="w-full text-center text-sm font-semibold text-black border-gray-200 border border-t-0 rounded-b-md cursor-pointer hover:bg-black hover:text-white hover:p-3 hover:rounded-b-xl transition-all duration-200 ease-in-out"
+          onClick={handleAddNewTask}
+        >
+          Add Task
+        </div>
+
+        {/* DndContext uses Context API to share data between draggable and droppable components and hooks */}
+        <DraggableList items={tasks} onDragEnd={setTasks}>
+          {(isDragging) => (
+            <div className="pb-2 w-full h-full overflow-x-hidden overflow-y-auto">
+              {tasks.map((task) => (
+                <>
+                  <SortableItem
+                    key={task.id}
+                    task={task}
+                    isDragging={isDragging}
+                    openEditModal={openEditModal}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                </>
+              ))}
+              {isModalOpen && (
+                <TaskModal
+                  task={editingTask}
+                  onSave={handleUpdateTask}
+                  onExit={handleExitModal}
+                  onDelete={handleDeleteTask}
+                />
+              )}
+            </div>
+          )}
+        </DraggableList>
+      </div>
     </div>
   );
 }
