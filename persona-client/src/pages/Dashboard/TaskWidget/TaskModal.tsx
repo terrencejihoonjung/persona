@@ -60,6 +60,7 @@ function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
         <div className="flex flex-col px-8">
           <input
             type="text"
+            name="text"
             value={taskState.text}
             onChange={handleInputChange}
             className="appearance-none outline-none font-bold text-3xl mb-10"
@@ -67,14 +68,15 @@ function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
           />
 
           <label
-            htmlFor="taskDescription"
+            htmlFor="description"
             className="block text-xl font-semibold mb-2"
           >
             Description
           </label>
           <textarea
-            id="taskDescription"
-            value={taskState!.description}
+            id="description"
+            name="description"
+            value={taskState.description}
             onChange={handleInputChange}
             className="w-full px-3 py-2 mb-8 border-gray-400 border rounded-2xl"
             placeholder="Description"

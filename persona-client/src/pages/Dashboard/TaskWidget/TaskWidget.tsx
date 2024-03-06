@@ -238,7 +238,7 @@ function TaskWidget() {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full">
+    <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full overflow-hidden">
       <div className="pl-4 pt-4 pb-2 border-b w-full">
         <h2 className="text-xl font-bold">Tasks</h2>
       </div>
@@ -252,30 +252,35 @@ function TaskWidget() {
         </div>
 
         {/* DndContext uses Context API to share data between draggable and droppable components and hooks */}
-        <DraggableList items={tasks} onDragEnd={setTasks}>
-          {(isDragging) => (
-            <div className="pb-2 w-full h-full overflow-x-hidden overflow-y-auto">
-              {tasks.map((task) => (
-                <SortableItem
-                  key={task.id}
-                  task={task}
-                  isDragging={isDragging}
-                  openEditModal={openEditModal}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-              ))}
-              {isModalOpen && (
-                <TaskModal
-                  task={editingTask}
-                  onSave={handleSaveTask}
-                  onExit={handleExitModal}
-                  onDelete={handleDeleteTask}
-                />
-              )}
-            </div>
-          )}
-        </DraggableList>
+        <div
+          className="flex-1 overflow-x-hidden overflow-y-auto"
+          style={{ maxHeight: "calc(100% - 4rem)" }}
+        >
+          <DraggableList items={tasks} onDragEnd={setTasks}>
+            {(isDragging) => (
+              <div className="w-full">
+                {tasks.map((task) => (
+                  <SortableItem
+                    key={task.id}
+                    task={task}
+                    isDragging={isDragging}
+                    openEditModal={openEditModal}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                ))}
+              </div>
+            )}
+          </DraggableList>
+        </div>
       </div>
+      {isModalOpen && (
+        <TaskModal
+          task={editingTask}
+          onSave={handleSaveTask}
+          onExit={handleExitModal}
+          onDelete={handleDeleteTask}
+        />
+      )}
     </div>
   );
 }
