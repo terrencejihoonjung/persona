@@ -12,29 +12,40 @@ type TaskModalProps = {
 
 function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
   const [taskState, setTaskState] = useState<Task>(task!);
-  const [subtasks, setSubtasks] = useState<Task[]>(task.subtasks!);
 
-  const handleInputChange = (
+  function handleInputChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ) {
     const { name, value } = e.target;
     const updatedTaskState = { ...taskState, [name]: value };
     setTaskState(updatedTaskState);
-    onSave(updatedTaskState);
-  };
+  }
 
-  const handleCheckboxChange = (id: string, completed: boolean) => {
+  function handleSave() {
+    onSave(taskState);
+    onExit();
+  }
+
+  function handleDelete() {
+    onDelete(taskState.id);
+    onExit();
+  }
+
+  function handleSubtasksReorder(newSubtasks: Task[]) {
+    setTaskState((prevTaskState) => ({
+      ...prevTaskState,
+      subtasks: newSubtasks,
+    }));
+  }
+
+  function handleCheckboxChange(id: string, completed: boolean) {
     setTaskState((prevTaskState) => {
-      const updatedSubtasks = prevTaskState.subtasks!.map((subtask) => {
-        if (subtask.id === id) {
-          return { ...subtask, completed };
-        }
-        return subtask;
-      });
-
+      const updatedSubtasks = prevTaskState.subtasks!.map((subtask) =>
+        subtask.id === id ? { ...subtask, completed } : subtask
+      );
       return { ...prevTaskState, subtasks: updatedSubtasks };
     });
-  };
+  }
 
   return (
     <div className="z-30 fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
@@ -83,10 +94,13 @@ function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
           ></textarea>
 
           <h2 className="font-semibold text-xl">Sub-Tasks</h2>
-          <DraggableList items={subtasks} onDragEnd={setSubtasks}>
+          <DraggableList
+            items={taskState.subtasks!}
+            onDragEnd={handleSubtasksReorder}
+          >
             {(isDragging) => (
               <div className="py-2 w-full h-full overflow-x-hidden overflow-y-auto">
-                {subtasks.map((subtask) => (
+                {taskState.subtasks!.map((subtask) => (
                   <SortableItem
                     key={subtask.id}
                     task={subtask}
@@ -100,13 +114,13 @@ function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
         </div>
         <span className="flex justify-end items-center w-full px-4 mt-12 space-x-4">
           <button
-            onClick={() => onDelete(taskState.id)}
+            onClick={handleDelete}
             className="px-4 py-2 text-white bg-red-500 rounded-xl hover:bg-red-700 transition duration-150 ease-in-out"
           >
             Delete
           </button>
           <button
-            onClick={() => onSave(taskState)}
+            onClick={handleSave}
             className="px-4 py-2 mr-2 text-white bg-blue-500 rounded-xl hover:bg-blue-700 transition duration-150 ease-in-out"
           >
             Save
