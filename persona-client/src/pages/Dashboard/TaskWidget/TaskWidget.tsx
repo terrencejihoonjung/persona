@@ -237,7 +237,7 @@ function TaskWidget() {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full overflow-clip">
+    <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full overflow-hidden">
       <div className="pl-4 pt-4 pb-2 border-b w-full">
         <h2 className="text-xl font-bold">Tasks</h2>
       </div>
