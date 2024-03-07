@@ -1,7 +1,7 @@
-import { useState } from "react";
+import useTaskModal from "../../../hooks/useTaskModal"; // Adjust the import path
 import { Task } from "../../../types/TaskTypes";
 import DraggableList from "../../../components/ui/DraggableList";
-import SortableItem from "./SortableItem"; // For sub-tasks
+import SortableItem from "./SortableItem";
 
 type TaskModalProps = {
   task: Task;
@@ -11,72 +11,17 @@ type TaskModalProps = {
 };
 
 function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
-  const [taskState, setTaskState] = useState<Task>(task!);
-
-  function handleInputChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    const { name, value } = e.target;
-    const updatedTaskState = { ...taskState, [name]: value };
-    setTaskState(updatedTaskState);
-  }
-
-  function handleSave() {
-    onSave(taskState);
-    onExit();
-  }
-
-  function handleDelete() {
-    onDelete(taskState.id);
-    onExit();
-  }
-
-  function handleSubtasksReorder(newSubtasks: Task[]) {
-    setTaskState((prevTaskState) => ({
-      ...prevTaskState,
-      subtasks: newSubtasks,
-    }));
-  }
-
-  function handleCheckboxChange(id: string, completed: boolean) {
-    setTaskState((prevTaskState) => {
-      const updatedSubtasks = prevTaskState.subtasks!.map((subtask) =>
-        subtask.id === id ? { ...subtask, completed } : subtask
-      );
-      return { ...prevTaskState, subtasks: updatedSubtasks };
-    });
-  }
-
-  function handleNewSubtask() {
-    const newSubTask = {
-      id: `subtask-${Date.now()}`,
-      text: "",
-      completed: false,
-      type: "subtask",
-    };
-    setTaskState((prevTaskState) => ({
-      ...prevTaskState,
-      subtasks: [newSubTask, ...prevTaskState.subtasks!],
-    }));
-  }
-
-  function handleSubtaskTextChange(id: string, newText: string) {
-    setTaskState((prevTaskState) => ({
-      ...prevTaskState,
-      subtasks: prevTaskState.subtasks!.map((subtask) =>
-        subtask.id === id ? { ...subtask, text: newText } : subtask
-      ),
-    }));
-  }
-
-  function handleSubtaskDelete(subtaskId: string) {
-    setTaskState((prevTaskState) => ({
-      ...prevTaskState,
-      subtasks: prevTaskState.subtasks!.filter(
-        (subtask) => subtask.id !== subtaskId
-      ),
-    }));
-  }
+  const {
+    taskState,
+    handleInputChange,
+    handleSave,
+    handleDelete,
+    handleSubtasksReorder,
+    handleCheckboxChange,
+    handleNewSubtask,
+    handleSubtaskTextChange,
+    handleSubtaskDelete,
+  } = useTaskModal(task, onSave, onDelete, onExit);
 
   return (
     <div className="z-30 fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">

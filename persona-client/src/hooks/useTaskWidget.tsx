@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Task } from "../types/TaskTypes";
 import { mockTasks } from "../data/mockTasks";
 
-export default function useTaskManager() {
+export default function useTaskWidget() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingTask, setEditingTask] = useState<Task>({} as Task);

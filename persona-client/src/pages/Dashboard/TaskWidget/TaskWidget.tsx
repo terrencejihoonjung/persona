@@ -1,7 +1,7 @@
 import DraggableList from "../../../components/ui/DraggableList";
 import SortableItem from "./SortableItem";
 import TaskModal from "./TaskModal";
-import useTaskManager from "../../../hooks/useTaskManager";
+import useTaskWidget from "../../../hooks/useTaskWidget";
 
 function TaskWidget() {
   const {
@@ -15,7 +15,7 @@ function TaskWidget() {
     handleDeleteTask,
     handleExitModal,
     handleCheckboxChange,
-  } = useTaskManager();
+  } = useTaskWidget();
 
   return (
     <div className="flex flex-col items-start justify-start border rounded-2xl shadow-lg w-full h-full overflow-hidden">
