@@ -80,7 +80,7 @@ function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
 
   return (
     <div className="z-30 fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-      <div className="flex flex-col justify-between relative top-20 mx-auto py-4 border w-2/5 max-h-2/3 shadow-lg rounded-2xl bg-white overflow-hidden">
+      <div className="flex flex-col justify-between relative top-20 mx-auto py-4 border w-2/5 max-h-2/3 shadow-lg rounded-2xl bg-white">
         <div className="flex flex-col max-h-4/5">
           <span className="flex justify-end items-center w-full px-4 mb-4">
             <button onClick={onExit} className="">
@@ -132,7 +132,7 @@ function TaskModal({ task, onSave, onExit, onDelete }: TaskModalProps) {
             >
               Add Sub Task
             </div>
-            <div className="w-full overflow-x-hidden overflow-y-auto grow">
+            <div className="w-full max-h-80 overflow-x-hidden overflow-y-auto grow">
               <DraggableList
                 items={taskState.subtasks!}
                 onDragEnd={handleSubtasksReorder}
