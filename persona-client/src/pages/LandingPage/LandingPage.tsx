@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function LandingPage() {
   return (
     <div className="py-12 px-72 flex flex-col justify-between items-center h-full">
@@ -14,9 +16,12 @@ function LandingPage() {
             AI-powered productivity platform.
           </p>
         </div>
-        <button className="px-8 py-3 bg-gray-100 border rounded-2xl font-semibold text-md">
+        <Link
+          to="account"
+          className="px-8 py-3 bg-gray-100 border rounded-2xl font-semibold text-md"
+        >
           Get Started
-        </button>
+        </Link>
       </div>
       <div className="mb-12">
         <img
