@@ -4,7 +4,7 @@ function NavBar() {
   const isAuthenticated = false;
 
   return (
-    <nav className={`py-6 w-full border-b`}>
+    <nav className={`p-6 w-full border-b`}>
       <div
         className={`flex items-center justify-between ${
           false ? "px-6" : "px-72"
