@@ -24,7 +24,6 @@ function SortableItem({
     useSortable({ id: task.id });
 
   const transformStyle = {
-    // Need to convert transform object into CSS transform string
     transform: CSS.Transform.toString(transform),
     transition,
   };
