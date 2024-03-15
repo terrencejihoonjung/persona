@@ -20,7 +20,7 @@ const Auth0ProviderLayout = () => (
     domain={import.meta.env.VITE_AUTHO_DOMAIN}
     clientId={import.meta.env.VITE_AUTHO_CLIENT_ID}
     authorizationParams={{
-      redirect_uri: window.location.origin,
+      redirect_uri: window.location.origin + "/dashboard",
     }}
   >
     <Outlet />
