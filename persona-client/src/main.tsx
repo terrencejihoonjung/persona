@@ -15,6 +15,18 @@ import Dashboard from "./pages/Dashboard/Dashboard.tsx";
 // import Account from "./pages/Account/Account.tsx";
 import "./index.css";
 
+const Auth0ProviderLayout = () => (
+  <Auth0Provider
+    domain={import.meta.env.VITE_AUTHO_DOMAIN}
+    clientId={import.meta.env.VITE_AUTHO_CLIENT_ID}
+    authorizationParams={{
+      redirect_uri: window.location.origin,
+    }}
+  >
+    <Outlet />
+  </Auth0Provider>
+);
+
 const ProtectedRoute = () => {
   const { isAuthenticated } = useAuth0();
   return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
@@ -22,26 +34,20 @@ const ProtectedRoute = () => {
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route element={<Layout />}>
-      <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Route>
+    <Route element={<Auth0ProviderLayout />}>
+      <Route element={<Layout />}>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
 
-      <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
+      </Route>
     </Route>
   )
 );
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Auth0Provider
-      domain={import.meta.env.VITE_AUTHO_DOMAIN}
-      clientId={import.meta.env.VITE_AUTHO_CLIENT_ID}
-      authorizationParams={{
-        redirect_uri: window.location.origin,
-      }}
-    >
-      <RouterProvider router={router} />
-    </Auth0Provider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
