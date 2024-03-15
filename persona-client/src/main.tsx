@@ -22,9 +22,9 @@ const ProtectedRoute = () => {
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
+    <Route element={<Layout />}>
       <Route element={<ProtectedRoute />}>
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Route>
 
       <Route path="/" element={<LandingPage />} />
