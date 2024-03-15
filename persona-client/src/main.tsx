@@ -6,13 +6,12 @@ import {
   RouterProvider,
   Route,
   Navigate,
-  RouteProps,
 } from "react-router-dom";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import Layout from "./components/Layout.tsx";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import Dashboard from "./pages/Dashboard/Dashboard.tsx";
-import Account from "./pages/Account/Account.tsx";
+// import Account from "./pages/Account/Account.tsx";
 import "./index.css";
 
 type ProtectedRouteProps = {
