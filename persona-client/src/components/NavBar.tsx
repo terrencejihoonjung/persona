@@ -22,7 +22,7 @@ function NavBar() {
                 onClick={() =>
                   logout({
                     logoutParams: {
-                      returnTo: window.location.origin + "home",
+                      returnTo: window.location.origin + "/home",
                     },
                   })
                 }
