@@ -15,17 +15,27 @@ import Dashboard from "./pages/Dashboard/Dashboard.tsx";
 // import Account from "./pages/Account/Account.tsx";
 import "./index.css";
 
-const Auth0ProviderLayout = () => (
-  <Auth0Provider
-    domain={import.meta.env.VITE_AUTHO_DOMAIN}
-    clientId={import.meta.env.VITE_AUTHO_CLIENT_ID}
-    authorizationParams={{
-      redirect_uri: window.location.origin + "/dashboard",
-    }}
-  >
-    <Outlet />
-  </Auth0Provider>
-);
+const Auth0ProviderLayout = () => {
+  const domain = import.meta.env.VITE_AUTHO_DOMAIN;
+  const clientId = import.meta.env.VITE_AUTHO_CLIENT_ID;
+  const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;
+
+  if (!(domain && clientId && redirectUri)) {
+    return null;
+  }
+
+  return (
+    <Auth0Provider
+      domain={domain}
+      clientId={clientId}
+      authorizationParams={{
+        redirect_uri: redirectUri,
+      }}
+    >
+      <Outlet />
+    </Auth0Provider>
+  );
+};
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useAuth0();

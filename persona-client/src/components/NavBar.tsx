@@ -4,6 +4,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 function NavBar() {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
 
+  const handleLogIn = async () => {
+    await loginWithRedirect({
+      appState: {
+        returnTo: "/dashboard",
+      },
+    });
+  };
+
   return (
     <nav className={`p-6 w-full border-b`}>
       <div
@@ -46,7 +54,7 @@ function NavBar() {
 
             <span>
               <button
-                onClick={() => loginWithRedirect()}
+                onClick={handleLogIn}
                 className="px-7 py-2 bg-gray-100 border rounded-2xl font-semibold text-md"
               >
                 Log In

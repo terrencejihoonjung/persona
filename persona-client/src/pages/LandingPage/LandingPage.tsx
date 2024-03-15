@@ -3,6 +3,17 @@ import { useAuth0 } from "@auth0/auth0-react";
 function LandingPage() {
   const { loginWithRedirect } = useAuth0();
 
+  const handleSignUp = async () => {
+    await loginWithRedirect({
+      appState: {
+        returnTo: "/dashboard",
+      },
+      authorizationParams: {
+        screen_hint: "signup",
+      },
+    });
+  };
+
   return (
     <div className="py-12 px-72 flex flex-col justify-center items-center h-full space-y-8">
       <div className="flex flex-col items-center text-center space-y-6">
@@ -19,7 +30,7 @@ function LandingPage() {
           </p>
         </div>
         <button
-          onClick={() => loginWithRedirect()}
+          onClick={handleSignUp}
           className="px-8 py-3 bg-gray-100 border rounded-2xl font-semibold text-md"
         >
           Get Started
