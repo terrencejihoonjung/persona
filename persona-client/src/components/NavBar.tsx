@@ -20,7 +20,11 @@ function NavBar() {
             <span>
               <button
                 onClick={() =>
-                  logout({ logoutParams: { returnTo: window.location.origin } })
+                  logout({
+                    logoutParams: {
+                      returnTo: window.location.origin + "/home",
+                    },
+                  })
                 }
                 className="px-7 py-2 bg-gray-100 border rounded-2xl font-semibold text-md"
               >
