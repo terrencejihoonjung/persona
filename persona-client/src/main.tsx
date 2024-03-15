@@ -6,6 +6,7 @@ import {
   RouterProvider,
   Route,
   Navigate,
+  Outlet,
 } from "react-router-dom";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import Layout from "./components/Layout.tsx";
@@ -14,38 +15,19 @@ import Dashboard from "./pages/Dashboard/Dashboard.tsx";
 // import Account from "./pages/Account/Account.tsx";
 import "./index.css";
 
-type ProtectedRouteProps = {
-  children: React.ReactNode;
-};
-
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuth0();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    // Redirect to the login page if not authenticated
-    return <Navigate to="/home" replace />;
-  }
-
-  return children;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route path="home" element={<LandingPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="dashboard" element={<Dashboard />} />
+      </Route>
 
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/" element={<LandingPage />} />
     </Route>
   )
 );
