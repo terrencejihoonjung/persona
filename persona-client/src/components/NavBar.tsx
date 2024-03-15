@@ -5,11 +5,7 @@ function NavBar() {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
 
   const handleLogIn = async () => {
-    await loginWithRedirect({
-      appState: {
-        returnTo: "/dashboard",
-      },
-    });
+    await loginWithRedirect();
   };
 
   return (

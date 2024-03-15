@@ -5,9 +5,6 @@ function LandingPage() {
 
   const handleSignUp = async () => {
     await loginWithRedirect({
-      appState: {
-        returnTo: "/dashboard",
-      },
       authorizationParams: {
         screen_hint: "signup",
       },
