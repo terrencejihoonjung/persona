@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   if (!isAuthenticated) {
     // Redirect to the login page if not authenticated
-    return <Navigate to="/" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return children;
@@ -36,10 +36,10 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route index element={<LandingPage />} />
+      <Route path="home" element={<LandingPage />} />
 
       <Route
-        path="dashboard"
+        path="/"
         element={
           <ProtectedRoute>
             <Dashboard />
