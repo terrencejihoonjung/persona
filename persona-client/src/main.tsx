@@ -45,12 +45,12 @@ const ProtectedRoute = () => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Auth0ProviderLayout />}>
-      <Route path="/" element={<Layout />}>
+      <Route element={<Layout />}>
         <Route element={<ProtectedRoute />}>
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 
-        <Route index element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
       </Route>
     </Route>
   )
