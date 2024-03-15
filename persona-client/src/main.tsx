@@ -29,7 +29,7 @@ const Auth0ProviderLayout = () => {
       domain={domain}
       clientId={clientId}
       authorizationParams={{
-        redirect_uri: redirectUri,
+        redirect_uri: redirectUri, // goes to this after successful auth
       }}
     >
       <Outlet />
