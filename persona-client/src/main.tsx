@@ -16,7 +16,7 @@ import Dashboard from "./pages/Dashboard/Dashboard.tsx";
 import "./index.css";
 
 const ProtectedRoute = () => {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };
 
