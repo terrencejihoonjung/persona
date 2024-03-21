@@ -1,12 +1,7 @@
 import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 
 function NavBar() {
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
-
-  const handleLogIn = async () => {
-    await loginWithRedirect();
-  };
+  let isAuthenticated = false;
 
   return (
     <nav className={`p-6 w-full border-b`}>
@@ -18,22 +13,16 @@ function NavBar() {
         {isAuthenticated ? (
           <>
             <span className="flex">
-              <h3 className="text-lg font-bold">{user!.email}'s' Persona</h3>
+              <h3 className="text-lg font-bold">Persona</h3>
             </span>
 
             <span>
-              <button
-                onClick={() =>
-                  logout({
-                    logoutParams: {
-                      returnTo: window.location.origin,
-                    },
-                  })
-                }
+              <Link
+                to="/"
                 className="px-7 py-2 bg-gray-100 border rounded-2xl font-semibold text-md"
               >
                 Log Out
-              </button>
+              </Link>
             </span>
           </>
         ) : (
@@ -49,12 +38,12 @@ function NavBar() {
             </span>
 
             <span>
-              <button
-                onClick={handleLogIn}
+              <Link
+                to="/account"
                 className="px-7 py-2 bg-gray-100 border rounded-2xl font-semibold text-md"
               >
                 Log In
-              </button>
+              </Link>
             </span>
           </>
         )}
