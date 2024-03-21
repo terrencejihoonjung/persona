@@ -1,8 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function NavBar() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    try {
+      const response = await fetch("http://localhost:3000/api/users/logout", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response.ok) {
+        setUser(null);
+        navigate("/account");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  }
 
   return (
     <nav className={`p-6 w-full border-b`}>
@@ -18,12 +36,12 @@ function NavBar() {
             </span>
 
             <span>
-              <Link
-                to="/"
+              <button
+                onClick={handleLogout}
                 className="px-7 py-2 bg-gray-100 border rounded-2xl font-semibold text-md"
               >
                 Log Out
-              </Link>
+              </button>
             </span>
           </>
         ) : (
