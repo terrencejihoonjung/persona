@@ -1,13 +1,34 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function SignUpForm() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle the form submission
+    try {
+      const response = await fetch("http://localhost:3000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const data = await response.json();
+      setUser(data.user);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   const handleGoogleSignIn = () => {
@@ -19,19 +40,19 @@ function SignUpForm() {
       <form onSubmit={handleSubmit} className="w-full space-y-4">
         <div className="w-full">
           <label
-            htmlFor="nameInput"
+            htmlFor="usernameInput"
             className="block text-sm font-semibold text-gray-700"
           >
-            Name
+            Username
           </label>
           <input
-            id="nameInput" // id matches the htmlFor of the label
-            name="name"
-            type="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id="usernameInput" // id matches the htmlFor of the label
+            name="username"
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-md"
-            placeholder="Enter your name"
+            placeholder="Enter your username"
             required
           />
         </div>

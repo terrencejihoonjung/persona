@@ -1,4 +1,4 @@
-import passport from "passport";
+import { Request } from "express";
 import {
   Strategy as JwtStrategy,
   ExtractJwt,
@@ -11,8 +11,16 @@ interface JwtPayload {
   id: string;
 }
 
+const cookieExtractor = (req: Request) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies["token"];
+  }
+  return token;
+};
+
 const options: StrategyOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
   secretOrKey: process.env.JWT_SECRET as string,
 };
 

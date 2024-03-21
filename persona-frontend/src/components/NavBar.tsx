@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function NavBar() {
-  let isAuthenticated = false;
+  const { user } = useAuth();
 
   return (
     <nav className={`p-6 w-full border-b`}>
       <div
         className={`flex items-center justify-between ${
-          isAuthenticated ? "px-6" : "px-72"
+          user ? "px-6" : "px-72"
         }`}
       >
-        {isAuthenticated ? (
+        {user ? (
           <>
             <span className="flex">
               <h3 className="text-lg font-bold">Persona</h3>

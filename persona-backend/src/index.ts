@@ -2,6 +2,9 @@ import express from "express";
 import passport from "passport";
 import connectDB from "./db.ts";
 import configurePassport from "./passport.ts";
+import gracefulShutdown from "./utils/gracefulShutdown.ts";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.ts";
 
 const app = express();
@@ -13,7 +16,14 @@ connectDB();
 configurePassport(passport);
 app.use(passport.initialize());
 
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow only this origin to access
+    methods: ["GET", "POST"], // Allow only these methods
+  })
+);
 app.use(express.json()); // Body parser
+app.use(cookieParser()); // Cookie parser
 
 // Routes
 app.use("/api/users", userRoutes);
@@ -22,4 +32,18 @@ app.use("/api/users", userRoutes);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
+});
+
+// For nodemon restarts
+process.once("SIGUSR2", () => {
+  gracefulShutdown("nodemon restart", () => {
+    process.kill(process.pid, "SIGUSR2");
+  });
+});
+
+// For app termination
+process.on("SIGINT", () => {
+  gracefulShutdown("app termination", () => {
+    process.exit(0);
+  });
 });
