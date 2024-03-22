@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.get("/verifyUser", verifyUser, (req: Request, res: Response) => {
+router.get("/verify", verifyUser, async (req: Request, res: Response) => {
   res.json({ message: "Access granted to protected route", user: req.user });
 });
 router.post("/register", registerUser);

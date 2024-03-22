@@ -5,6 +5,7 @@ import configurePassport from "./passport.ts";
 import gracefulShutdown from "./utils/gracefulShutdown.ts";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.ts";
 
 const app = express();
@@ -13,8 +14,8 @@ const app = express();
 connectDB();
 
 // Passport Initialization
-configurePassport(passport);
 app.use(passport.initialize());
+configurePassport(passport);
 
 app.use(
   cors({
@@ -25,6 +26,7 @@ app.use(
 );
 app.use(express.json()); // Body parser
 app.use(cookieParser()); // Cookie parser
+app.use(morgan("dev")); // Logging
 
 // Routes
 app.use("/api/users", userRoutes);

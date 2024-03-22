@@ -8,6 +8,7 @@ interface IUser extends Express.User {
 }
 
 function verifyUser(req: Request, res: Response, next: NextFunction) {
+  console.log("hi");
   passport.authenticate(
     "jwt",
     { session: false },
@@ -16,6 +17,10 @@ function verifyUser(req: Request, res: Response, next: NextFunction) {
       user: IUser | false,
       info: { message: string } | undefined
     ) => {
+      console.log("Auth Callback - Error:", err);
+      console.log("Auth Callback - User:", user);
+      console.log("Auth Callback - Info:", info);
+
       if (err) {
         return res.status(400).json({
           message: "Something went wrong validating the user token",
@@ -27,7 +32,9 @@ function verifyUser(req: Request, res: Response, next: NextFunction) {
           .status(401)
           .json({ message: "Invalid Token or Token Expired", info });
       }
-      next();
+      console.log("hi");
+      req.user = user;
+      return next();
     }
   );
 }
