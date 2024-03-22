@@ -17,12 +17,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        console.log("hi");
-        const response = await fetch("http://localhost:3000/api/users/verify", {
-          method: "GET",
-          credentials: "include",
-        });
-        console.log("hi");
+        const response = await fetch(
+          "https://localhost:3000/api/users/verify",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Verification failed");

@@ -12,8 +12,9 @@ function LoginForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/api/users/login", {
+      const response = await fetch("https://localhost:3000/api/users/login", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -23,6 +24,7 @@ function LoginForm() {
         throw new Error(`Error: ${response.statusText}`);
       }
       const data = await response.json();
+      console.log(data.user);
       setUser(data.user);
       navigate("/dashboard");
     } catch (error) {

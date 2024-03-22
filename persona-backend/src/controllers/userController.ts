@@ -4,6 +4,25 @@ import User from "../models/User.ts";
 import argon2 from "argon2";
 import generateToken from "../utils/generateToken.ts";
 
+interface User {
+  _id: string;
+  username: string;
+  email: string;
+}
+
+export const verifyUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  if (req.user) {
+    const { _id, username, email } = req.user as User;
+    res.json({
+      message: "Access granted",
+      user: { id: _id, username, email },
+    });
+  }
+};
+
 export const registerUser = async (
   req: Request,
   res: Response
@@ -31,8 +50,8 @@ export const registerUser = async (
 
     res.cookie("token", token, {
       httpOnly: true, // The cookie cannot be accessed by client-side JS
-      secure: NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "lax", // Strictly enforce same site policy
+      secure: true, // Use secure cookies in production
+      sameSite: "none", // Strictly enforce same site policy
       maxAge: 3600000, // Set cookie expiry, e.g., 1 hour
     });
 
@@ -70,20 +89,20 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     const token = generateToken(user._id.toString());
 
-    res.cookie("token", token, {
-      httpOnly: true, // The cookie cannot be accessed by client-side JS
-      secure: NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "lax", // Strictly enforce same site policy
-      maxAge: 3600000, // Set cookie expiry, e.g., 1 hour
-    });
-
-    res.json({
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-      },
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true, // The cookie cannot be accessed by client-side JS
+        secure: true, // Use secure cookies in production
+        sameSite: "none", // Strictly enforce same site policy
+        maxAge: 3600000, // Set cookie expiry, e.g., 1 hour
+      })
+      .json({
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+        },
+      });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ message: "Server error" });
@@ -95,8 +114,16 @@ export const logoutUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    res.cookie("token", "", { httpOnly: true, expires: new Date(0) });
-    res.status(200).json({ message: "Logged out successfully" });
+    if (req.cookies["token"]) {
+      res
+        .clearCookie("token")
+        .status(200)
+        .json({ message: "Logged out successfully" });
+    } else {
+      res
+        .status(401)
+        .json({ message: "Logout Unsuccessful, User does not Exist" });
+    }
   } catch (error) {
     console.error("Logout Error:", error);
     res.status(500).json({ message: "Server error" });

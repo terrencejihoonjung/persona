@@ -3,12 +3,18 @@ import passport from "passport";
 import connectDB from "./db.ts";
 import configurePassport from "./passport.ts";
 import gracefulShutdown from "./utils/gracefulShutdown.ts";
+import https from "https";
+import fs from "fs";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.ts";
 
 const app = express();
+const serverOptions = {
+  key: fs.readFileSync("../localhost+2-key.pem"), // Your generated key
+  cert: fs.readFileSync("../localhost+2.pem"), // Your generated certificate
+};
 
 // Connect Mongoose to MongoDB Atlas
 connectDB();
@@ -19,7 +25,7 @@ configurePassport(passport);
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -33,8 +39,8 @@ app.use("/api/users", userRoutes);
 
 // Server Listener
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+https.createServer(serverOptions, app).listen(port, () => {
+  console.log(`HTTPS server running on https://localhost:${port}`);
 });
 
 // For nodemon restarts
