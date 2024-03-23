@@ -4,20 +4,13 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: {
       type: String,
-      required: true,
     },
+    googleId: { type: String, unique: true, sparse: true }, // sparse index allows for nulls
+    isEmailVerified: { type: Boolean, default: false },
   },
   {
     timestamps: true, // createdAt and updatedAt timestamps

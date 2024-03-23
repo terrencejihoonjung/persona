@@ -4,22 +4,18 @@ import argon2 from "argon2";
 import generateToken from "../utils/generateToken.ts";
 import generateRefreshToken from "../utils/generateRefreshToken.ts";
 import { redisClient, storeRefreshToken } from "../redisClient.ts";
-
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-}
+import { IUser } from "../interfaces/IUser.ts";
 
 export const verifyUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   if (req.user) {
-    const { _id, username, email } = req.user as User;
+    const { _id, username, email, googleId, isEmailVerified } =
+      req.user as IUser;
     res.json({
       message: "Access granted",
-      user: { id: _id, username, email },
+      user: { id: _id, username, email, googleId, isEmailVerified },
     });
   }
 };
@@ -88,7 +84,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     const user = await User.findOne({ email });
 
-    if (!user) {
+    if (!user || !user.password) {
       res.status(401).json({ message: "Invalid email or password" });
       return;
     }

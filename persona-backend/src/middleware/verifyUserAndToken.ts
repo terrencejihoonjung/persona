@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../interfaces/User.ts";
+import { IUser } from "../interfaces/IUser.ts";
 import passport from "passport";
 import generateToken from "../utils/generateToken.ts";
 import { verifyRefreshToken } from "../redisClient.ts";
@@ -16,7 +16,11 @@ const verifyUserAndToken = (
   passport.authenticate(
     "jwt",
     { session: false },
-    (err: Error | null, user: User | false, info: PassportInfo | undefined) => {
+    (
+      err: Error | null,
+      user: IUser | false,
+      info: PassportInfo | undefined
+    ) => {
       if (err) {
         return next(err); // Handle authentication error
       }

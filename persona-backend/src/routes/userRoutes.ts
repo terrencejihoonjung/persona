@@ -1,6 +1,5 @@
 import express from "express";
 import verifyUserAndToken from "../middleware/verifyUserAndToken.ts";
-import passport from "passport";
 import {
   verifyUser,
   registerUser,
