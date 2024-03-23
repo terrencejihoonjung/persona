@@ -1,5 +1,5 @@
 import express from "express";
-import { Request, Response } from "express";
+import verifyUserAndToken from "../middleware/verifyUserAndToken.ts";
 import passport from "passport";
 import {
   verifyUser,
@@ -10,11 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get(
-  "/verify",
-  passport.authenticate("jwt", { session: false }),
-  verifyUser
-);
+router.get("/verify", verifyUserAndToken, verifyUser);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);

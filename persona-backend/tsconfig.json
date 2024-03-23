@@ -12,8 +12,8 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "strictFunctionTypes": true
-    // "allowSyntheticDefaultImports": true
+    "strictFunctionTypes": true,
+    "allowSyntheticDefaultImports": true
   },
 
   "include": ["src/**/*"]

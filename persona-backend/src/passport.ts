@@ -1,10 +1,7 @@
 import { Request } from "express";
-import {
-  Strategy as JwtStrategy,
-  ExtractJwt,
-  StrategyOptions,
-} from "passport-jwt";
+import { Strategy as JwtStrategy, StrategyOptions } from "passport-jwt";
 import { PassportStatic } from "passport";
+import { ACCESS_TOKEN_SECRET } from "./env.ts";
 import User from "./models/User.ts";
 
 interface JwtPayload {
@@ -14,14 +11,14 @@ interface JwtPayload {
 const cookieExtractor = (req: Request) => {
   let token = null;
   if (req && req.cookies) {
-    token = req.cookies["token"];
+    token = req.cookies["accessToken"];
   }
   return token;
 };
 
 const options: StrategyOptions = {
   jwtFromRequest: cookieExtractor,
-  secretOrKey: process.env.JWT_SECRET as string,
+  secretOrKey: ACCESS_TOKEN_SECRET as string,
 };
 
 const jwtStrategy = new JwtStrategy(

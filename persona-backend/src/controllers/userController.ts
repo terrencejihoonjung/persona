@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { NODE_ENV } from "../env.ts";
 import User from "../models/User.ts";
 import argon2 from "argon2";
 import generateToken from "../utils/generateToken.ts";
+import generateRefreshToken from "../utils/generateRefreshToken.ts";
+import { redisClient, storeRefreshToken } from "../redisClient.ts";
 
 interface User {
   _id: string;
@@ -46,15 +47,32 @@ export const registerUser = async (
       password: hashedPassword,
     });
 
-    const token = generateToken(user._id.toString());
+    const accessToken = generateToken(user._id.toString());
+    const refreshToken = generateRefreshToken(user._id.toString());
 
-    res.cookie("token", token, {
-      httpOnly: true, // The cookie cannot be accessed by client-side JS
-      secure: true, // Use secure cookies in production
-      sameSite: "none", // Strictly enforce same site policy
-      maxAge: 3600000, // Set cookie expiry, e.g., 1 hour
+    storeRefreshToken(
+      `refreshToken:${refreshToken}`,
+      user._id.toString(),
+      43200
+    ); // 12 hours exp
+
+    // Access Token
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 60000, // 1800000 - 30 minutes, 60000 - 1 minute
     });
 
+    // Refresh Token
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 43200000, // 12 hours
+    });
+
+    // User Data
     res.json({
       user: {
         id: user._id,
@@ -87,22 +105,39 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const token = generateToken(user._id.toString());
+    const accessToken = generateToken(user._id.toString());
+    const refreshToken = generateRefreshToken(user._id.toString());
 
-    res
-      .cookie("token", token, {
-        httpOnly: true, // The cookie cannot be accessed by client-side JS
-        secure: true, // Use secure cookies in production
-        sameSite: "none", // Strictly enforce same site policy
-        maxAge: 3600000, // Set cookie expiry, e.g., 1 hour
-      })
-      .json({
-        user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-        },
-      });
+    storeRefreshToken(
+      `refreshToken:${refreshToken}`,
+      user._id.toString(),
+      43200
+    ); // 12 hours exp
+
+    // Access Token
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 60000, // 1800000 - 30 minutes, 60000 - 1 minute
+    });
+
+    // Refresh Token
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 43200000, // 12 hours
+    });
+
+    // User Data
+    res.json({
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ message: "Server error" });
@@ -114,16 +149,21 @@ export const logoutUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.cookies["token"]) {
-      res
-        .clearCookie("token")
-        .status(200)
-        .json({ message: "Logged out successfully" });
-    } else {
-      res
-        .status(401)
-        .json({ message: "Logout Unsuccessful, User does not Exist" });
+    const refreshToken = req.cookies["refreshToken"];
+    if (refreshToken) {
+      await redisClient.del(`refreshToken:${refreshToken}`);
     }
+
+    res
+      .setHeader("Cache-Control", "no-store")
+      .clearCookie("accessToken")
+      .clearCookie("refreshToken")
+      .status(refreshToken ? 200 : 401)
+      .json({
+        message: refreshToken
+          ? "Logged out successfully"
+          : "Unauthorized User, Refresh Token Not Found",
+      });
   } catch (error) {
     console.error("Logout Error:", error);
     res.status(500).json({ message: "Server error" });
