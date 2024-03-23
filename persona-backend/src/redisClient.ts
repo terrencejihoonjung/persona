@@ -14,7 +14,7 @@ export const storeRefreshToken = async (
   userId: string,
   ttl: number
 ) => {
-  await redisClient.setex(refreshToken, ttl, userId);
+  await redisClient.set(`refreshToken:${refreshToken}`, userId, "EX", ttl);
 };
 
 export const verifyRefreshToken = async (refreshToken: string) => {

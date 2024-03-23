@@ -50,18 +50,14 @@ export const registerUser = async (
     const accessToken = generateToken(user._id.toString());
     const refreshToken = generateRefreshToken(user._id.toString());
 
-    storeRefreshToken(
-      `refreshToken:${refreshToken}`,
-      user._id.toString(),
-      43200
-    ); // 12 hours exp
+    storeRefreshToken(refreshToken, user._id.toString(), 43200); // 12 hours exp
 
     // Access Token
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 60000, // 1800000 - 30 minutes, 60000 - 1 minute
+      maxAge: 1800000, // 1800000 milliseconds - 30 minutes, 60000 milliseconds - 1 minute
     });
 
     // Refresh Token
@@ -108,18 +104,14 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     const accessToken = generateToken(user._id.toString());
     const refreshToken = generateRefreshToken(user._id.toString());
 
-    storeRefreshToken(
-      `refreshToken:${refreshToken}`,
-      user._id.toString(),
-      43200
-    ); // 12 hours exp
+    storeRefreshToken(refreshToken, user._id.toString(), 43200); // 12 hours exp
 
     // Access Token
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 60000, // 1800000 - 30 minutes, 60000 - 1 minute
+      maxAge: 1800000, // 1800000 milliseconds - 30 minutes, 60000 milliseconds - 1 minute
     });
 
     // Refresh Token
